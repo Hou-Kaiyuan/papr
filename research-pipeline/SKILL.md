@@ -63,145 +63,94 @@ Read `ROUND_STATE.md` and print a summary. Ask user if they want to continue.
 
 ## Run a Round
 
-Execute these 8 phases IN ORDER. Do not skip ahead.
-Do NOT read any other files unless explicitly told to below.
-After each phase, say "Phase N complete." and immediately start the next.
+Execute phases 1-8 in order.
+CRITICAL: After reading paper files, IMMEDIATELY take the next action.
+Do NOT pause, do NOT read additional files, do NOT ask what to do.
 
 ### Phase 1: Scout
 
-Read the paper's abstract, introduction, related work, and evaluation sections.
-Then use WebSearch to check three things:
-
-**A. State of the art** — search `[task] state of the art 2024 2025` and `[task] benchmark leaderboard`. Flag top methods not compared against.
-
-**B. Missing baselines** — search `[method category] alternatives comparison`. Flag methods that should be baselines but aren't.
-
-**C. Novelty check** — search `[core contribution] similar prior work`. Flag papers that could undermine novelty claims.
-
-Also verify key citations exist and claims match the cited papers.
-
-Save results as the Round Briefing:
+Step 1a. Read ONLY the paper's abstract and introduction (2 files max).
+Step 1b. From what you just read, extract: the task name, the method name, the key baselines compared against, and the main contribution claim. Write these down in your response.
+Step 1c. IMMEDIATELY run WebSearch for: `[task name] state of the art 2024 2025`
+Step 1d. Run WebSearch for: `[method name] [task name] baselines comparison`
+Step 1e. Run WebSearch for: `[main contribution] similar prior work`
+Step 1f. Write the Scout Report to a variable (do not save to file yet):
 ```
 ## Scout Report — Round [N]
 ### Missing baselines
 | Method | Venue/Year | Performance | URL |
 ### Missing citations
-- [title] — relevant because [reason]
+- [title] -- relevant because [reason]
 ### Novelty concerns
 - [paper]: similar because [description]
 ### Actions
-- [finding] → [route to: experiments | write | discussion-panel]
+- [finding] -> [route to: experiments | write | discussion-panel]
 ```
-
-Say "Phase 1 complete." then start Phase 2.
+Step 1g. Say "Phase 1 complete." and IMMEDIATELY start Phase 2.
 
 ### Phase 2: Inspect
 
-Read the full paper. Check for format and storyline issues:
-
-**Format checks:** figures (sizing, legends, readability), tables (arrows, bolding, width), citations (resolved refs, consistent style), captions (shorter than body paragraph), notation (symbols defined at first use).
-
-**Storyline checks:** abstract (problem + result quantified), introduction (motivation → gap → prior work → approach → contributions), method (no forward dependencies, assumptions supported), evaluation (experiments map to claims, baselines current).
-
-Rate each issue as BLOCKER, MAJOR, or MINOR. Append to Round Briefing:
+Step 2a. Read the paper's method and evaluation sections (you already have abstract+intro from Phase 1).
+Step 2b. IMMEDIATELY list format issues found: figures, tables, citations, captions, notation.
+Step 2c. IMMEDIATELY list storyline issues: logical gaps, unsupported claims, transition failures.
+Step 2d. Rate each as BLOCKER/MAJOR/MINOR. Write the Inspect Report:
 ```
 ## Inspect Report — Round [N]
 ### Quality issues
-BLOCKERS: [N] — [list]
-MAJOR: [N] — [list]
-MINOR: [N] — [list]
+BLOCKERS: [N] -- [list]
+MAJOR: [N] -- [list]
+MINOR: [N] -- [list]
 ### Storyline verdict: COHERENT | PARTIALLY COHERENT | NEEDS MAJOR REVISION
 ### Transition failures
 - [concept appears without introduction]
 ### Unsupported claims
 - [claim without evidence]
 ```
-
-Say "Phase 2 complete." then start Phase 3.
+Step 2e. Say "Phase 2 complete." and IMMEDIATELY start Phase 3.
 
 ### Phase 3: Panel
 
-Write Round Briefing into `DISCUSSION_THREAD.md` as a Wave 0 context block.
-Then read `discussion-panel/SKILL.md` and follow its orchestration instructions
-to run the 2-wave parallel panel. Do NOT read any other files until that file
-tells you to.
-
-Extract from the panel output: average score and AUTHOR action list.
-
-Say "Phase 3 complete." then start Phase 4.
+Step 3a. Write the Scout Report + Inspect Report into `DISCUSSION_THREAD.md` as Wave 0.
+Step 3b. Read `discussion-panel/SKILL.md` and follow its instructions to run the panel.
+Step 3c. After panel completes, extract: average score and AUTHOR action list.
+Step 3d. Say "Phase 3 complete." and IMMEDIATELY start Phase 4.
 
 ### Phase 4: Experiments (conditional)
 
-Check the AUTHOR action list for items marked "requires new experiment".
-If none exist, say "No experiments needed. Skipping to Phase 5."
-
-If experiments needed, read `experiments.md` (the standalone skill in the
-parent directory) and follow its instructions to design and verify experiments.
-
-Say "Phase 4 complete." then start Phase 5.
+Step 4a. Check the AUTHOR action list for "requires new experiment" items.
+Step 4b. If none: say "No experiments needed. Skipping to Phase 5." and go to Phase 5.
+Step 4c. If yes: read `experiments.md` (parent directory), design and verify experiments.
+Step 4d. Say "Phase 4 complete." and IMMEDIATELY start Phase 5.
 
 ### Phase 5: Write
 
-Collect all inputs:
-- AUTHOR action list (text-only items)
-- Experiment results from Phase 4 (if any)
-- BLOCKER + MAJOR quality issues from Phase 2
-
-Implement changes to the paper in priority order:
-1. Structural changes (section reorders, merges)
-2. Content changes (rewrites, additions, removals)
-3. Local fixes (terms, citations, captions)
-4. Style fixes (em dashes, author names)
-
-Follow these rules for ALL edits:
-- No em dashes — use commas, semicolons, colons, or parentheses
-- No rhetorical questions — state findings directly
-- No "a reviewer might ask" — never
-- Define every new term at first use
-- Captions shorter than the body paragraph referencing the figure
-
-Log every change to `ROUND_STATE.md` under `## Changes this round`.
-Do NOT run humanizer here — that is Phase 6.
-
-Say "Phase 5 complete." then start Phase 6.
+Step 5a. Collect: AUTHOR action list (text-only items), experiment results (if any), BLOCKER+MAJOR issues from Phase 2.
+Step 5b. IMMEDIATELY start editing the paper. Priority order: structural, content, local, style.
+Step 5c. Rules: no em dashes, no rhetorical questions, no "a reviewer might ask", define terms at first use, captions shorter than body paragraph.
+Step 5d. Log every change to `ROUND_STATE.md` under `## Changes this round`.
+Step 5e. Say "Phase 5 complete." and IMMEDIATELY start Phase 6.
 
 ### Phase 6: Humanize
 
-Read the list of modified sections from `ROUND_STATE.md`.
-For each modified section, read `humanize.md` (the standalone skill in the
-parent directory) and apply it. Only process sections modified in Phase 5.
-
-After each section, use Grep to confirm no em dashes remain.
-
-Append to `ROUND_STATE.md`:
-```
-### Humanizer pass
-Sections processed: [list]
-Em dashes removed: [N]
-Rhetorical questions converted: [N]
-```
-
-Say "Phase 6 complete." then start Phase 7.
+Step 6a. Read modified sections list from `ROUND_STATE.md`.
+Step 6b. For each modified section, read `humanize.md` (parent directory) and apply its 24 patterns. Only process modified sections.
+Step 6c. Use Grep to confirm no em dashes remain in modified sections.
+Step 6d. Append humanizer log to `ROUND_STATE.md`.
+Step 6e. Say "Phase 6 complete." and IMMEDIATELY start Phase 7.
 
 ### Phase 7: External Review
 
-If Codex MCP is available (tools mcp__codex__codex and mcp__codex__codex-reply):
-1. Read `external-review.md` for the review prompt template
-2. Send the paper text to Codex (strip author info, no round/score metadata)
-3. Append review to `ROUND_STATE.md`
-4. Compare with internal panel: note new issues, confirmed issues, internal-only concerns
-
-If Codex MCP is NOT available:
-Note "External review skipped — Codex MCP not connected." in `ROUND_STATE.md`.
-
-Say "Phase 7 complete." then start Phase 8.
+Step 7a. If Codex MCP is NOT available: note "External review skipped" in `ROUND_STATE.md`, go to Phase 8.
+Step 7b. If available: read `external-review.md` for the prompt template.
+Step 7c. Send paper to Codex (strip author info, no round/score metadata).
+Step 7d. Append review to `ROUND_STATE.md`. Compare with internal panel.
+Step 7e. Say "Phase 7 complete." and IMMEDIATELY start Phase 8.
 
 ### Phase 8: Summary
 
-Collect from this round: panel scores, external review score, all changes, open issues.
-
-Write to `ROUND_STATE.md`:
-```markdown
+Step 8a. Collect: panel scores, external review score, all changes, open issues.
+Step 8b. Write round summary to `ROUND_STATE.md`:
+```
 ## Round [N] Summary
 ### Scores
 | Source | Score |
@@ -210,18 +159,16 @@ Write to `ROUND_STATE.md`:
 | External reviewer | Y/10 |
 | Combined estimate | Z/10 |
 ### What changed this round
-- [list of changes from Phase 5]
+- [list]
 ### Open issues
-- [ ] [issue — source]
+- [ ] [issue]
 ### Top remaining concerns
 1. [concern]
 2. [concern]
 3. [concern]
 ```
-
-Update rounds completed and score history in `ROUND_STATE.md`.
-
-Present summary to user. Then check stopping conditions (see below).
+Step 8c. Update rounds completed and score history.
+Step 8d. Present summary to user. Check stopping conditions below.
 
 ---
 
