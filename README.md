@@ -1,6 +1,6 @@
 # PAPR -- Paper Autonomous Pipeline Review
 
-5 Claude Code skills for autonomous academic paper improvement. Each skill runs independently with its own context -- no interruptions from context overload.
+5 Claude Code skills for autonomous academic paper improvement. Each skill runs independently with its own context.
 
 ## Install
 
@@ -17,15 +17,54 @@ codex setup
 claude mcp add codex -s user -- codex mcp-server
 ```
 
-## Skills
+## Usage
 
-| Skill | Command | What it does |
-|---|---|---|
-| **papr-pipeline** | `/papr-pipeline 3 path/to/latex-project` | Multi-round improvement loop. Chains the other 4 skills. |
-| **papr-panel** | `/papr-panel path/to/latex-project` | 6-agent parallel review panel (2 waves) |
-| **papr-write** | `/papr-write path/to/latex-project` | Implement text changes + remove AI writing patterns |
-| **papr-review** | `/papr-review path/to/latex-project` | External blind review via Codex MCP |
-| **papr-experiment** | `/papr-experiment path/to/latex-project` | Design + verify experiments from feedback |
+### Full pipeline (the main workflow)
+
+```bash
+# Run 3 rounds of autonomous improvement on a LaTeX project
+/papr-pipeline 3 path/to/latex-project
+
+# Run 2 rounds
+/papr-pipeline 2 path/to/latex-project
+
+# Default (3 rounds, will ask for paper path)
+/papr-pipeline
+```
+
+### Review panel only
+
+```bash
+# Run the 6-agent parallel review panel
+/papr-panel path/to/latex-project
+
+# Scores only, no discussion
+/papr-panel path/to/latex-project score
+
+# Focus the panel on a specific topic
+/papr-panel path/to/latex-project focus "related work"
+```
+
+### Write + humanize
+
+```bash
+# Implement text changes from the panel's action list, then remove AI writing patterns
+/papr-write path/to/latex-project
+```
+
+### External review
+
+```bash
+# Send paper for blind review via Codex MCP (requires Codex MCP setup)
+/papr-review path/to/latex-project
+```
+
+### Experiment design
+
+```bash
+# Design and verify experiments from reviewer feedback
+/papr-experiment path/to/latex-project
+```
 
 ## How the Pipeline Works
 
