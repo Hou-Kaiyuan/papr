@@ -107,6 +107,7 @@ papr/
 │       ├── advisor.md
 │       ├── reviewer-expert.md
 │       ├── reviewer-standard.md
+│       ├── reviewer-brief.md
 │       ├── reviewer-lay.md
 │       └── author.md
 └── research-pipeline/

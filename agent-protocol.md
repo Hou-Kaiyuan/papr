@@ -3,22 +3,36 @@
 
 All agents in a multi-agent session communicate through a single append-only file:
 `DISCUSSION_THREAD.md` in the working directory. Every agent reads the full thread
-before each turn and appends to it after. No agent passes messages directly to another.
+before writing and appends to it after. No agent passes messages directly to another.
 
-FROM: [ROLE]         # ADVISOR | REVIEWER_EXPERT | REVIEWER_STANDARD | REVIEWER_LAY | AUTHOR
+## Message Format
+
+```
+---
+FROM: [ROLE]
 ROUND: [N]
-TURN: [T]
-RE: [optional]       # e.g. RE: TURN 3
+WAVE: [1|2]
+RE: [optional — e.g. RE: REVIEWER_EXPERT WAVE 1]
+---
 
-## Default Turn Order
+[content]
 
-1. ADVISOR
-2. REVIEWER_EXPERT
-3. REVIEWER_STANDARD
-4. REVIEWER_LAY
-5. AUTHOR (responds to all, posts action list)
-6. REVIEWER_EXPERT (rebuttal round)
-7. ADVISOR (closes, gives score)
+SIGNAL: DONE
+```
+
+FROM: ADVISOR | REVIEWER_EXPERT | REVIEWER_STANDARD | REVIEWER_BRIEF | REVIEWER_LAY | AUTHOR
+
+## Waves
+
+All agents run in parallel within each wave.
+
+**Wave 1:** Independent perspectives. Each agent reads the paper and writes their
+initial review. No cross-referencing other agents (thread may be empty or have
+only pipeline context).
+
+**Wave 2:** Cross-discussion. Each agent reads the full thread (all Wave 1 output)
+and responds to specific points from other agents. AUTHOR posts action list.
+ADVISOR synthesizes scores.
 
 
 ## ROUND_STATE.md Format
@@ -27,7 +41,7 @@ RE: [optional]       # e.g. RE: TURN 3
 # Round [N] State
 ## Paper: [filename]
 ## Session started: [timestamp]
-## Anticipated score: [X/10]
+## Score: [X/10] (Advisor: A | Expert: E | Standard: S | Brief: B | Lay: L)
 
 ## Changes this round
 - [text changes]
@@ -35,9 +49,8 @@ RE: [optional]       # e.g. RE: TURN 3
 - [figures/tables updated]
 
 ## Open issues
-- [ ] description — raised by ROLE at TURN T
+- [ ] description — raised by ROLE in WAVE W
 
 ## Resolved issues
-- [x] description — resolved at TURN T
+- [x] description — resolved in WAVE W
 ```
-

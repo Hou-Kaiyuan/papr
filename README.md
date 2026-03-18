@@ -24,10 +24,10 @@ Each round runs: Scout → Inspect → Panel → Experiments (if needed) → Wri
 
 ### Panel — autonomous review
 
-5 agents (Advisor, Expert Reviewer, Standard Reviewer, Lay Reviewer, Author) discuss your paper autonomously. You see only the final summary with scores and an action list.
+6 agents (Advisor, Expert, Standard, Brief, Lay, Author) review your paper in parallel — like sitting in the same room. Two waves: independent perspectives, then cross-discussion. You see only the final summary with scores and an action list.
 
 ```bash
-/papr panel                         # full 7-turn session
+/papr panel                         # full 2-wave parallel session
 /papr panel score                   # scores only, no discussion
 /papr panel focus "related work"    # focused session
 ```
@@ -59,7 +59,7 @@ Round N (repeat up to 3x)
 │
 ├─ 1. Scout        find missing related work and baselines
 ├─ 2. Inspect      audit formatting, figures, tables, narrative
-├─ 3. Panel        autonomous multi-agent review discussion
+├─ 3. Panel        parallel multi-agent review (6 agents, 2 waves)
 ├─ 4. Experiments  design + verify new experiments (if needed)
 ├─ 5. Write        implement all text changes
 ├─ 6. Humanize     remove AI writing artifacts
@@ -85,10 +85,11 @@ papr/
 ├── discussion-panel/
 │   ├── SKILL.md                     # panel router + turn sequence
 │   └── roles/
-│       ├── advisor.md               # senior professor perspective
-│       ├── reviewer-expert.md       # domain expert review
-│       ├── reviewer-standard.md     # area chair level review
-│       ├── reviewer-lay.md          # non-expert accessibility
+│       ├── advisor.md               # senior professor, big-picture
+│       ├── reviewer-expert.md       # domain expert, main + appendix
+│       ├── reviewer-standard.md     # area chair, main + appendix
+│       ├── reviewer-brief.md        # busy reviewer, main text only
+│       ├── reviewer-lay.md          # non-expert, reads everything
 │       └── author.md                # paper defense + action list
 └── research-pipeline/
     ├── SKILL.md                     # pipeline router + phases
