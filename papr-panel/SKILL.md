@@ -77,7 +77,10 @@ You are [ROLE] in an academic paper review panel.
 [paste from roles/[role].md]
 
 ## Paper
-Read the paper from [paper_dir]. [scope based on role]
+Read the paper's .tex files from [paper_dir]. [scope based on role]
+Also read the compiled PDF: [paper_dir]/main.pdf (for visual layout, figures, tables).
+Also read individual figure files from [paper_dir]/figures/ (PNG/JPG/PDF images).
+You MUST look at the actual figures to evaluate visual quality, not just the LaTeX code.
 
 ## Discussion So Far
 [DISCUSSION_THREAD.md content, or "Empty" for Wave 1]

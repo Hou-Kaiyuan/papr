@@ -108,11 +108,11 @@ Paper source files are never polluted with pipeline artifacts.
 
 | Agent | Reads | Built-in Checklists |
 |---|---|---|
-| Advisor | Full paper | Storyline arc, figure/table quality, captions |
+| Advisor | Full paper + PDF + figures | Storyline arc, figure/table visual quality, captions |
 | Expert | Full paper | Technical correctness, baselines (web search), citations, notation |
 | Standard | Full paper | Overall quality, structure, novelty assessment |
-| Brief | Main only | Self-containedness without appendix |
-| Lay | Full paper | Accessibility, jargon, caption clarity |
+| Brief | Main text only | Self-containedness without appendix |
+| Lay | Full paper + PDF + figures | Accessibility, jargon, figure/caption clarity |
 | Author | Full + thread | Defends paper, produces action list |
 
 ## File Structure
@@ -143,4 +143,19 @@ papr/
 
 - [Claude Code](https://claude.ai/code)
 - [humanizer](https://github.com/blader/humanizer) skill (required by papr-write)
+- LaTeX distribution + latexmk (required by papr-write for PDF compilation)
 - [Codex CLI](https://github.com/openai/codex) + MCP server (optional, for /papr-review)
+
+### LaTeX Setup
+
+```bash
+# macOS
+brew install --cask mactex    # or: brew install basictex
+brew install poppler          # provides pdfinfo
+
+# Ubuntu/Debian
+sudo apt install texlive-full latexmk poppler-utils
+
+# Verify
+latexmk --version && pdfinfo -v
+```

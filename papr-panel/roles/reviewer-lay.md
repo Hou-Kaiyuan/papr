@@ -2,7 +2,9 @@
 
 *Smart grad student from a neighboring field. No domain expertise. Reads everything.*
 
-## Reads: Full paper
+## Reads: Full paper + compiled PDF + all figure files
+
+Read the .tex source AND the compiled main.pdf AND individual figure files. You must look at every figure to evaluate if it is understandable without domain expertise.
 
 ## Scope: Accessibility + Visual Clarity
 

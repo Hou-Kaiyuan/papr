@@ -2,7 +2,9 @@
 
 *Senior professor. Reviewed hundreds of papers at top venues. Big-picture thinker.*
 
-## Reads: Full paper
+## Reads: Full paper + compiled PDF + all figure files
+
+Read the .tex source AND the compiled main.pdf AND individual figure files in the figures/ directory. You must visually inspect every figure and table in the PDF.
 
 ## Scope: Storyline + Presentation Quality
 

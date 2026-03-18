@@ -3,7 +3,7 @@ name: papr-write
 description: |
   Implement text changes to a paper and remove AI writing patterns. Takes an
   action list from papr-panel and edits the LaTeX source. Then invokes
-  /humanizer on modified sections. Invoke as /papr-write [paper_dir].
+  /humanizer on modified sections, then compiles PDF. Invoke as /papr-write [paper_dir].
 allowed-tools:
   - Read
   - Write
@@ -15,16 +15,16 @@ allowed-tools:
   - Agent
 ---
 
-# Paper Writer + Humanizer
+# Paper Writer + Humanizer + Compile
 
-Implements text changes, then invokes `/humanizer` to remove AI writing patterns.
+Three phases: edit text, humanize, compile PDF.
 
 ## On invocation
 
 1. Read `.claude/latest-run/latest/ROUND_STATE.md` for the action list.
 2. Read `.claude/latest-run/latest/DISCUSSION_THREAD.md` for context if needed.
 3. Read the paper's .tex files in `[paper_dir]` that need editing.
-4. Apply changes (Phase A), then humanize (Phase B).
+4. Apply changes (Phase A), then humanize (Phase B), then compile (Phase C).
 
 ---
 
@@ -57,7 +57,7 @@ Log every change to `.claude/latest-run/latest/ROUND_STATE.md` under `## Changes
 
 ## Phase B: Humanize
 
-After ALL edits complete, invoke `/humanizer` on each modified section.
+After ALL text edits complete, invoke `/humanizer` on each modified section.
 
 The `/humanizer` skill handles 24 AI writing patterns including inflated significance,
 promotional language, em dash overuse, AI vocabulary, and more. It must be installed
@@ -65,11 +65,34 @@ separately (see README).
 
 After humanizing, use Grep to confirm no em dashes remain in modified sections.
 
+---
+
+## Phase C: Compile PDF
+
+After humanizing, compile the paper so reviewers see the final rendered output.
+
+```bash
+cd [paper_dir] && latexmk -pdf -interaction=nonstopmode main.tex 2>&1 | tail -20
+```
+
+If compilation fails, check the error output. Fix LaTeX errors in the .tex files
+(missing braces, undefined commands, etc.) and retry. Do NOT skip compilation.
+
+After successful compilation, verify:
+```bash
+pdfinfo [paper_dir]/main.pdf | head -5
+```
+
+---
+
+## After completion
+
 Append to `.claude/latest-run/latest/ROUND_STATE.md`:
 ```
-### Write + Humanize pass
+### Write + Humanize + Compile pass
 Sections modified: [list]
 Changes applied: [N]
 Em dashes removed: [N]
 AI patterns fixed: [N]
+PDF compiled: [YES/NO]
 ```

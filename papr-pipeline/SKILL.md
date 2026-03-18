@@ -24,9 +24,9 @@ allowed-tools:
 Fully autonomous. Do NOT ask the user between rounds. Do NOT pause for confirmation.
 
 Each round chains:
-1. `/papr-panel` -- multi-agent review, produces action list + score
+1. `/papr-panel` -- multi-agent review (reads PDF + figures + tex), produces action list + score
 2. `/papr-experiment` -- design experiments if needed (conditional)
-3. `/papr-write` -- implement text changes + remove AI writing patterns
+3. `/papr-write` -- implement text changes + humanize + compile PDF
 4. `/papr-review` -- external blind review via Codex MCP
 
 ## Output Directory
