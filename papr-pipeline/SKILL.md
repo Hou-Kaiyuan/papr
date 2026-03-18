@@ -16,27 +16,28 @@ allowed-tools:
 # Paper Improvement Pipeline
 
 Chains other papr skills in sequence. Each round:
-1. `/papr-panel` — multi-agent review, produces action list + score
-2. `/papr-experiment` — design experiments if needed (conditional)
-3. `/papr-write` — implement text changes + remove AI writing patterns
-4. `/papr-review` — external blind review via Codex MCP
+1. `/papr-panel` -- multi-agent review, produces action list + score
+2. `/papr-experiment` -- design experiments if needed (conditional)
+3. `/papr-write` -- implement text changes + remove AI writing patterns
+4. `/papr-review` -- external blind review via Codex MCP
 
 ## On invocation
 
-1. If `paper_dir` not given, ask: "Which folder is your LaTeX project?"
-2. Glob for `[paper_dir]/*.tex`. Note the main .tex file.
-3. If `[paper_dir]/ROUND_STATE.md` exists, read it first (required before overwrite).
-4. Write `[paper_dir]/ROUND_STATE.md`:
+IMPORTANT: Do NOT explore the filesystem. Do NOT run `ls`. Do NOT search with multiple patterns. Follow these exact steps:
+
+1. The user provides `paper_dir` as an argument (e.g. `Gauge_Paper`). If not given, ask: "Which folder is your LaTeX project?" and wait for answer. Do NOT guess or search.
+2. Read `[paper_dir]/ROUND_STATE.md` and `[paper_dir]/DISCUSSION_THREAD.md` if they exist (use Read tool, it will error if not found -- that is fine, ignore the error).
+3. Write `[paper_dir]/ROUND_STATE.md`:
 ```
 # Pipeline State
 ## Paper: [paper_dir]
-## Main: [main.tex path]
 ## Rounds: [N, default 3]
 ## Started: [date]
 ## Completed: 0
 ## Scores: []
 ```
-5. Start the round loop.
+4. Write `[paper_dir]/DISCUSSION_THREAD.md` with empty content.
+5. Start the round loop immediately.
 
 ## Round loop
 
