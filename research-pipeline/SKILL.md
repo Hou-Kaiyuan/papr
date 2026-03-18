@@ -21,119 +21,115 @@ allowed-tools:
 
 # Research Pipeline
 
-End-to-end autonomous paper improvement. Default: 3 rounds.
-Each round ends with a score /10 and a summary of what changed.
-The human is only consulted between rounds (to approve continuing) and for ESCALATE issues.
+Lightweight orchestrator. Each phase runs in its own Agent context.
 
 ---
 
-## Subcommands
+## On `start [N] [paper_dir]`
 
-| Invocation | Behavior |
-|---|---|
-| `/papr pipeline start [N] [paper_dir]` | Start pipeline. N = rounds (default 3). paper_dir = LaTeX project folder (e.g. `paper/Vivar`). If paper_dir omitted, ask user. |
-| `/papr pipeline round` | Run the next full round (reads current state) |
-| `/papr pipeline status` | Print `ROUND_STATE.md` summary and current score |
-| `/papr pipeline scout` | Run Phase 1 only |
-| `/papr pipeline inspect` | Run Phase 2 only |
-| `/papr pipeline panel` | Run Phase 3 only |
-| `/papr pipeline experiments` | Run Phase 4 only (if experiments needed) |
-| `/papr pipeline write` | Run Phase 5 only |
-| `/papr pipeline humanize` | Run Phase 6 only |
-| `/papr pipeline review` | Run Phase 7 only |
-| `/papr pipeline summary` | Run Phase 8 only |
-
----
-
-## Initialization (`start`)
-
-Do exactly these steps. Do NOT read any other files. Do NOT run `ls` or `head` or verify anything extra.
-
-1. If `paper_dir` was provided, use it. Otherwise ask: "Which folder is your LaTeX project?"
-2. Find the main .tex file: Glob for `[paper_dir]/*.tex` (NOT recursive). Pick the one named `main.tex` (or the first result if no main.tex).
-3. If `[paper_dir]/ROUND_STATE.md` or `[paper_dir]/DISCUSSION_THREAD.md` already exist, read them first (required before overwriting).
+1. If `paper_dir` not given, ask: "Which folder is your LaTeX project?"
+2. Glob for `[paper_dir]/*.tex`. Note the main .tex file path.
+3. If `[paper_dir]/ROUND_STATE.md` exists, read it first.
 4. Write `[paper_dir]/ROUND_STATE.md`:
-
-```markdown
+```
 # Research Pipeline State
 ## Paper directory: [paper_dir]
 ## Main file: [main.tex path]
-## Rounds planned: [N]
+## Rounds planned: [N, default 3]
 ## Started: [timestamp]
+## Current phase: 1
 ## Rounds completed: 0
 ## Score history: []
 ```
-
-5. Write `[paper_dir]/DISCUSSION_THREAD.md` with empty content.
-6. Read the main .tex file to find all `\input{...}` commands. Note the list of included .tex files.
-7. Proceed immediately to Round 1 Phase 1 below.
+5. Write `[paper_dir]/DISCUSSION_THREAD.md` (empty, read first if exists).
+6. Start the round loop below.
 
 ---
 
-## Per-Round Phases
+## Round Loop
 
-Run in order. For each phase: first read the paper files listed, then read the phase file, then execute.
+For each round, run phases 1-8 by spawning an Agent for each phase.
+Each Agent gets a fresh context and runs independently.
 
-### Phase 1: Scout
-1. Read the paper's abstract and introduction .tex files (find them from the `\input` list in step 6)
-2. Read `phases/scout.md`
-3. Execute the scout instructions using what you read
+```
+for round in 1..N:
+    run_phase(1, "scout")
+    run_phase(2, "inspect")
+    run_phase(3, "panel")
+    run_phase(4, "experiments")
+    run_phase(5, "write")
+    run_phase(6, "humanize")
+    run_phase(7, "review")
+    run_phase(8, "summary")
+    read ROUND_STATE.md for score
+    if score >= 9: stop
+    ask user: "Ready for Round [N+1]?"
+```
 
-### Phase 2: Inspect
-1. Read the paper's method, evaluation, and conclusion .tex files
-2. Read `phases/inspect.md`
-3. Execute the inspect instructions
+### How to run each phase
 
-### Phase 3: Panel
-1. Read `phases/panel.md`
-2. Follow its instructions (writes to DISCUSSION_THREAD.md, spawns agents)
+Spawn an Agent (foreground, NOT background) with this prompt:
 
-### Phase 4: Experiments (conditional)
-1. Check AUTHOR action list for "requires new experiment" items
-2. If none, skip to Phase 5
-3. If yes, read `phases/experiments.md` and execute
+```
+You are running Phase [N] ([name]) of the PAPR research pipeline.
 
-### Phase 5: Write
-1. Read `phases/write.md`
-2. Implement changes to the paper files
+Paper directory: [paper_dir]
+Main tex file: [main.tex path]
+Round: [current round]
 
-### Phase 6: Humanize
-1. Read `phases/humanize.md`
-2. Apply to sections modified in Phase 5
+Read the phase instructions at: [skill_dir]/research-pipeline/phases/[phase].md
+Read the paper files in: [paper_dir]/
+Read the current state from: [paper_dir]/ROUND_STATE.md
 
-### Phase 7: External Review
-1. Read `phases/review.md`
-2. If Codex MCP available, send paper for blind review. If not, skip.
+Execute the phase instructions. Write all output to [paper_dir]/ROUND_STATE.md
+and/or [paper_dir]/DISCUSSION_THREAD.md as instructed by the phase file.
 
-### Phase 8: Summary
-1. Read `phases/summary.md`
-2. Write round summary to ROUND_STATE.md, present to user
+When done, output a one-line summary of what you did.
+```
+
+Phase files:
+
+| Phase | File | Skip condition |
+|---|---|---|
+| 1. Scout | `phases/scout.md` | never |
+| 2. Inspect | `phases/inspect.md` | never |
+| 3. Panel | `phases/panel.md` | never |
+| 4. Experiments | `phases/experiments.md` | no "requires new experiment" in action list |
+| 5. Write | `phases/write.md` | never |
+| 6. Humanize | `phases/humanize.md` | never |
+| 7. Review | `phases/review.md` | Codex MCP not available |
+| 8. Summary | `phases/summary.md` | never |
+
+After each Agent returns, update `Current phase` in ROUND_STATE.md and proceed.
 
 ---
 
-## Round Continuity
+## On `status`
 
-**Round 2+ only:** Before Phase 1, prepend the previous round's summary from
-`ROUND_STATE.md` to the context. All phases should avoid re-raising issues
-already marked resolved in that summary.
+Read `[paper_dir]/ROUND_STATE.md` and print summary.
+
+## On `round`
+
+Read ROUND_STATE.md, run the round loop for one round.
+
+## On single phase (e.g. `scout`, `inspect`)
+
+Spawn one Agent for that phase only.
 
 ---
 
 ## Stopping Conditions
 
-Stop early if:
-- Score reaches 9+ -- paper is ready
-- `SIGNAL: ESCALATE` unresolved after external review -- surface to human
-- User invokes `/papr pipeline status` and declines to continue
-
----
+- Score >= 9 -- paper is ready
+- `SIGNAL: ESCALATE` unresolved -- surface to human
+- All planned rounds complete
 
 ## Score Reference
 
-| Score | Interpretation |
+| Score | Meaning |
 |---|---|
-| 9-10 | Strong accept, ready for top venue |
-| 7-8 | Weak accept, minor revisions |
-| 5-6 | Borderline, significant work remains |
-| 3-4 | Weak reject, major revision needed |
-| 1-2 | Reject, fundamental issues |
+| 9-10 | Strong accept |
+| 7-8 | Weak accept |
+| 5-6 | Borderline |
+| 3-4 | Weak reject |
+| 1-2 | Reject |
