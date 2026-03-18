@@ -51,7 +51,8 @@ Pass any additional arguments (e.g. `start`, `score`, `all`, `focus <topic>`) di
 
 ```
 # Full multi-round improvement (the main workflow)
-/papr pipeline start
+/papr pipeline start                 # default 3 rounds
+/papr pipeline start 5               # custom number of rounds
 
 # Review panel only
 /papr panel

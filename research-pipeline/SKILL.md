@@ -17,7 +17,7 @@ The human is only consulted between rounds (to approve continuing) and for ESCAL
 
 | Invocation | Behavior |
 |---|---|
-| `/research-pipeline start` | Initialize state files, begin Round 1 |
+| `/research-pipeline start [N]` | Initialize state files, begin Round 1. N = number of rounds (default: 3) |
 | `/research-pipeline round` | Run the next full round (reads current state) |
 | `/research-pipeline status` | Print `ROUND_STATE.md` summary and current score |
 | `/research-pipeline scout` | Run Phase 1 only (scout) |

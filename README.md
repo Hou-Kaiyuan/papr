@@ -12,10 +12,11 @@ cp -r papr ~/.claude/skills/
 
 ### Pipeline — full multi-round improvement
 
-The main workflow. Runs up to 3 rounds of autonomous improvement, each scored out of 10. Stops early at 9+.
+The main workflow. Runs multiple rounds of autonomous improvement, each scored out of 10. Stops early at 9+.
 
 ```bash
-/papr pipeline start                # begin full loop
+/papr pipeline start                # default 3 rounds
+/papr pipeline start 5              # custom number of rounds
 /papr pipeline status               # check score and progress
 /papr pipeline round                # run next round manually
 ```
