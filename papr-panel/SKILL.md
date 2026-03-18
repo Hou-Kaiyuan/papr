@@ -25,14 +25,14 @@ Each agent writes to its own temp file to avoid race conditions.
 
 IMPORTANT: Do NOT explore the filesystem. Do NOT run `ls` or `bash test`. Do NOT read all .tex files upfront. The agents will read the paper themselves.
 
-1. Read `[paper_dir]/.claude/latest/DISCUSSION_THREAD.md` (ignore error if not found).
-2. Read `[paper_dir]/.claude/latest/ROUND_STATE.md` (ignore error if not found).
+1. Read `.claude/latest/DISCUSSION_THREAD.md` (ignore error if not found).
+2. Read `.claude/latest/ROUND_STATE.md` (ignore error if not found).
 3. Immediately start Wave 1 below. Do NOT read the paper .tex files yourself -- each agent reads them in their own context.
 
 ## Wave 1: Independent Reviews (all in parallel)
 
 Spawn ALL 6 agents using Agent tool with `run_in_background: true`.
-Each agent writes to its own temp file in `[paper_dir]/`:
+Each agent writes to its own temp file in `.claude/latest/`:
 
 ```
 Agent(ADVISOR)           -> wave1_advisor.md
@@ -79,7 +79,7 @@ Wave 1: Write your initial review including all checklists from your role.
 Wave 2: Read others' comments and respond. Address points by name.
 
 ## Output
-Write to [paper_dir]/.claude/latest/wave[N]_[role].md using format:
+Write to .claude/latest/wave[N]_[role].md using format:
 ---
 FROM: [ROLE]
 WAVE: [1|2]
@@ -92,7 +92,7 @@ SIGNAL: DONE
 
 1. Extract scores from each reviewer
 2. Compute average score
-3. Write to `[paper_dir]/.claude/latest/ROUND_STATE.md`:
+3. Write to `.claude/latest/ROUND_STATE.md`:
 ```
 ## Panel Summary
 ### Score: [avg]/10 (Advisor: X | Expert: Y | Standard: Z | Brief: B | Lay: W)

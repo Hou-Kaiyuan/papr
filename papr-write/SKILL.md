@@ -2,8 +2,8 @@
 name: papr-write
 description: |
   Implement text changes to a paper and remove AI writing patterns. Takes an
-  action list from papr-panel and edits the LaTeX source. Then runs a humanize
-  pass on all modified sections. Invoke as /papr-write [paper_dir].
+  action list from papr-panel and edits the LaTeX source. Then invokes
+  /humanizer on modified sections. Invoke as /papr-write [paper_dir].
 allowed-tools:
   - Read
   - Write
@@ -15,15 +15,14 @@ allowed-tools:
 
 # Paper Writer + Humanizer
 
-Implements text changes, then removes AI writing patterns. Two phases in one skill.
+Implements text changes, then invokes `/humanizer` to remove AI writing patterns.
 
 ## On invocation
 
-1. Read `[paper_dir]/.claude/latest/ROUND_STATE.md` for the action list.
-2. Read `[paper_dir]/.claude/latest/DISCUSSION_THREAD.md` for context if needed.
-3. Read the paper's .tex files that need editing.
+1. Read `.claude/latest/ROUND_STATE.md` for the action list.
+2. Read `.claude/latest/DISCUSSION_THREAD.md` for context if needed.
+3. Read the paper's .tex files in `[paper_dir]` that need editing.
 4. Apply changes (Phase A), then humanize (Phase B).
-5. For the full humanize pattern reference, read `humanize-patterns.md` in this skill's directory.
 
 ---
 
@@ -50,32 +49,21 @@ Apply changes in this priority order (to avoid line-number conflicts):
 - **Merging subsections:** Unified topic sentence, integrate, remove second heading.
 - **Caption shortening:** Captions describe *what is shown*. Move interpretation to body.
 
-Log every change to `[paper_dir]/.claude/latest/ROUND_STATE.md` under `## Changes this round`.
+Log every change to `.claude/latest/ROUND_STATE.md` under `## Changes this round`.
 
 ---
 
 ## Phase B: Humanize
 
-After ALL edits complete, run the humanize pass on modified sections only.
+After ALL edits complete, invoke `/humanizer` on each modified section.
 
-### Patterns to Remove
+The `/humanizer` skill handles 24 AI writing patterns including inflated significance,
+promotional language, em dash overuse, AI vocabulary, and more. It must be installed
+separately (see README).
 
-**Content:** inflated significance ("pivotal", "testament", "evolving landscape"), promotional language ("groundbreaking", "nestled"), vague attributions ("experts argue"), superficial -ing phrases ("highlighting", "showcasing"), formulaic challenges sections.
+After humanizing, use Grep to confirm no em dashes remain in modified sections.
 
-**Language:** AI vocabulary overuse ("Additionally", "crucial", "delve", "foster", "underscore"), copula avoidance ("serves as" -> "is"), negative parallelisms ("not just X, but Y"), rule-of-three forcing, synonym cycling, false ranges ("from X to Y").
-
-**Style:** em dash overuse, mechanical boldface, inline-header bullet lists, title case in headings, emojis, curly quotes.
-
-**Communication:** chatbot artifacts ("I hope this helps"), knowledge-cutoff disclaimers, sycophantic tone, filler phrases ("in order to", "it is important to note"), excessive hedging, generic positive conclusions.
-
-### Process
-1. For each modified section, scan for patterns above
-2. Rewrite problematic sections preserving meaning
-3. Self-test: "What makes this obviously AI generated?" Fix remaining tells.
-4. Verify: grep for em dashes returns zero in modified sections
-
-### After completion
-Append to `[paper_dir]/.claude/latest/ROUND_STATE.md`:
+Append to `.claude/latest/ROUND_STATE.md`:
 ```
 ### Write + Humanize pass
 Sections modified: [list]

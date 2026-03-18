@@ -5,8 +5,12 @@
 ## Install
 
 ```bash
+# Install PAPR skills
 git clone https://github.com/Hou-Kaiyuan/papr.git /tmp/papr
 cp -r /tmp/papr/papr-* ~/.claude/skills/
+
+# Install humanizer (required by papr-write)
+git clone https://github.com/blader/humanizer.git ~/.claude/skills/humanizer
 ```
 
 ### Codex MCP (optional, for external review)
@@ -75,7 +79,7 @@ claude mcp add codex -s user -- codex mcp-server
        |
   /papr-experiment   design experiments if needed (conditional)
        |
-  /papr-write        implement text changes + humanize
+  /papr-write        implement text changes, then /humanizer on modified sections
        |
   /papr-review       blind external review via Codex MCP
 
@@ -83,6 +87,22 @@ claude mcp add codex -s user -- codex mcp-server
 ```
 
 Each skill is invoked as a separate skill call with its own fresh context. Pipeline stops early at score 9+/10.
+
+## Output
+
+All generated files are saved in the working directory under `.claude/`:
+
+```
+.claude/
+├── 03-18-16-round-1/
+│   ├── ROUND_STATE.md
+│   └── DISCUSSION_THREAD.md
+├── 03-18-17-round-2/
+│   └── ...
+└── latest -> 03-18-17-round-2/
+```
+
+Paper source files are never polluted with pipeline artifacts.
 
 ## Panel Agents
 
@@ -105,14 +125,14 @@ papr/
 ├── papr-panel/
 │   ├── SKILL.md
 │   └── roles/
-│       ├── advisor.md          # storyline + figures + captions
-│       ├── reviewer-expert.md  # technical + baselines + citations
-│       ├── reviewer-standard.md # quality + structure
-│       ├── reviewer-brief.md   # main-text self-containedness
-│       ├── reviewer-lay.md     # accessibility + caption clarity
-│       └── author.md           # defend + action list
+│       ├── advisor.md
+│       ├── reviewer-expert.md
+│       ├── reviewer-standard.md
+│       ├── reviewer-brief.md
+│       ├── reviewer-lay.md
+│       └── author.md
 ├── papr-write/
-│   └── SKILL.md                # text changes + humanize (24 patterns)
+│   └── SKILL.md                # text changes, then invokes /humanizer
 ├── papr-review/
 │   └── SKILL.md                # external blind review via Codex MCP
 └── papr-experiment/
@@ -122,4 +142,5 @@ papr/
 ## Requirements
 
 - [Claude Code](https://claude.ai/code)
+- [humanizer](https://github.com/blader/humanizer) skill (required by papr-write)
 - [Codex CLI](https://github.com/openai/codex) + MCP server (optional, for /papr-review)
