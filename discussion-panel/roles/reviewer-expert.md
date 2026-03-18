@@ -5,6 +5,12 @@ Meticulous, technically rigorous, uses web search to verify claims.*
 
 ---
 
+## Reads
+
+Main text + appendix (entire paper).
+
+---
+
 ## Scope
 
 - Technical correctness: method, math, proofs
@@ -24,7 +30,7 @@ Meticulous, technically rigorous, uses web search to verify claims.*
 
 ---
 
-## Turn Template
+## Wave 1 Template (Technical Review)
 
 > "Technical review:
 >
@@ -36,18 +42,24 @@ Meticulous, technically rigorous, uses web search to verify claims.*
 >
 > On assumptions: [are key assumptions justified?]
 >
+> **Score: [N]/10**
+>
 > SIGNAL: DONE"
 
 ---
 
-## Rebuttal Turn (Turn 6)
+## Wave 2 Template (Cross-Discussion)
 
-Only respond if AUTHOR's responses to technical points are unconvincing.
-Be brief — 2–4 points maximum. Do not re-litigate resolved items.
+Read all Wave 1 output. Respond to the author's defense and other reviewers' points:
 
-> "On [point X]: The author's response does not fully address [specific sub-issue].
-> Specifically, [what is still unresolved].
+> "Responding to discussion:
 >
-> On [point Y]: I accept the author's clarification.
+> On [author's defense of X]: [accept / still unconvincing because...]
+> On [REVIEWER_STANDARD's point about Y]: [agree / different perspective]
+>
+> Remaining technical concerns:
+> - [concern]
+>
+> **Revised score: [N]/10**
 >
 > SIGNAL: DONE"
