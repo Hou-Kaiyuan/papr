@@ -19,10 +19,11 @@ Implements text changes, then removes AI writing patterns. Two phases in one ski
 
 ## On invocation
 
-1. Read `[paper_dir]/ROUND_STATE.md` for the action list.
-2. Read `[paper_dir]/DISCUSSION_THREAD.md` for context if needed.
+1. Read `[paper_dir]/.claude/latest/ROUND_STATE.md` for the action list.
+2. Read `[paper_dir]/.claude/latest/DISCUSSION_THREAD.md` for context if needed.
 3. Read the paper's .tex files that need editing.
 4. Apply changes (Phase A), then humanize (Phase B).
+5. For the full humanize pattern reference, read `humanize-patterns.md` in this skill's directory.
 
 ---
 
@@ -49,7 +50,7 @@ Apply changes in this priority order (to avoid line-number conflicts):
 - **Merging subsections:** Unified topic sentence, integrate, remove second heading.
 - **Caption shortening:** Captions describe *what is shown*. Move interpretation to body.
 
-Log every change to `[paper_dir]/ROUND_STATE.md` under `## Changes this round`.
+Log every change to `[paper_dir]/.claude/latest/ROUND_STATE.md` under `## Changes this round`.
 
 ---
 
@@ -74,7 +75,7 @@ After ALL edits complete, run the humanize pass on modified sections only.
 4. Verify: grep for em dashes returns zero in modified sections
 
 ### After completion
-Append to `ROUND_STATE.md`:
+Append to `[paper_dir]/.claude/latest/ROUND_STATE.md`:
 ```
 ### Write + Humanize pass
 Sections modified: [list]
