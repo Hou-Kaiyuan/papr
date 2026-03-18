@@ -32,10 +32,10 @@ Verify with `claude mcp list` or `/mcp` inside Claude Code. The pipeline works w
 The main workflow. Runs multiple rounds of autonomous improvement, each scored out of 10. Stops early at 9+.
 
 ```bash
-/papr pipeline start                # default 3 rounds
-/papr pipeline start 5              # custom number of rounds
-/papr pipeline status               # check score and progress
-/papr pipeline round                # run next round manually
+/papr pipeline start 3 paper/main.tex   # specify rounds + paper path
+/papr pipeline start 2                  # will ask for paper path
+/papr pipeline status                   # check score and progress
+/papr pipeline round                    # run next round manually
 ```
 
 Each round: Scout, Inspect, Panel, Experiments (if needed), Write, Humanize, External Review, Summary.

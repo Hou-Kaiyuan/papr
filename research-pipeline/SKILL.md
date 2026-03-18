@@ -24,12 +24,12 @@ End-to-end autonomous paper improvement.
 
 ---
 
-## On `start [N]` — DO THIS IMMEDIATELY:
+## On `start [N] [paper_path]` — DO THIS IMMEDIATELY:
 
-**Step 1: Find the paper path (DO NOT read the paper yet).**
-Use Glob to search for `**/*.tex` and `**/*.pdf` in the working directory.
-If multiple .tex files found, pick the main one (the one with `\documentclass`).
-If none found, ask the user for the paper path and stop.
+**Step 1: Get the paper path (DO NOT read the paper yet).**
+If a paper path was provided as argument (e.g. `/papr pipeline start 2 paper/main.tex`), use it directly.
+If no path provided, ask the user: "Where is your paper? (e.g. paper/main.tex)"
+Do NOT scan the directory with Glob — large repos will be slow.
 IMPORTANT: Only note the file path. Do NOT read the paper contents yet.
 
 **Step 2: Create state files.**

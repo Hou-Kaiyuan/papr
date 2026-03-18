@@ -53,8 +53,8 @@ directly to the loaded file as its subcommand input.
 
 ```
 # Full multi-round improvement (the main workflow)
-/papr pipeline start                 # default 3 rounds
-/papr pipeline start 5               # custom number of rounds
+/papr pipeline start 3 paper/main.tex   # specify rounds and paper path
+/papr pipeline start 2                  # will ask for paper path
 
 # Review panel only
 /papr panel
