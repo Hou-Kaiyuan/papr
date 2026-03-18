@@ -29,21 +29,23 @@ Install: `git clone https://github.com/Hou-Kaiyuan/papr.git ~/.claude/skills/pap
 
 ## Subcommand Routing
 
-When invoked as `/papr <subcommand> [args]`, read the corresponding file and follow its instructions:
+When invoked as `/papr <subcommand> [args]`, read ONLY the corresponding file
+and immediately execute its instructions. Do NOT pre-read other files.
 
-| Subcommand | File to read | Example |
-|---|---|---|
-| `pipeline` | `research-pipeline/SKILL.md` | `/papr pipeline start` |
-| `panel` | `discussion-panel/SKILL.md` | `/papr panel` |
-| `inspect` | `inspect.md` | `/papr inspect` |
-| `storyline` | `storyline.md` | `/papr storyline` |
-| `write` | `write.md` | `/papr write` |
-| `humanize` | `humanize.md` | `/papr humanize all` |
-| `scout` | `scout.md` | `/papr scout` |
-| `experiments` | `experiments.md` | `/papr experiments` |
-| `external-review` | `external-review.md` | `/papr external-review` |
+| Subcommand | File to read and execute |
+|---|---|
+| `pipeline` | `research-pipeline/SKILL.md` |
+| `panel` | `discussion-panel/SKILL.md` |
+| `inspect` | `inspect.md` |
+| `storyline` | `storyline.md` |
+| `write` | `write.md` |
+| `humanize` | `humanize.md` |
+| `scout` | `scout.md` |
+| `experiments` | `experiments.md` |
+| `external-review` | `external-review.md` |
 
-Pass any additional arguments (e.g. `start`, `score`, `all`, `focus <topic>`) directly to the loaded file as its subcommand input.
+Pass any additional arguments (e.g. `start 5`, `score`, `all`, `focus <topic>`)
+directly to the loaded file as its subcommand input.
 
 ---
 
@@ -77,15 +79,6 @@ Pass any additional arguments (e.g. `start`, `score`, `all`, `focus <topic>`) di
 /papr humanize all               # remove AI writing patterns
 /papr humanize check             # scan without changing
 ```
-
----
-
-## Shared Protocol
-
-All multi-agent subcommands (`panel`, `pipeline`) use `agent-protocol.md`.
-Read it before running any panel or pipeline session.
-
-File: `agent-protocol.md`
 
 ---
 
