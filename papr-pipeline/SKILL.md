@@ -29,22 +29,21 @@ Chains other papr skills in sequence. Each round:
 
 ## Output Directory
 
-All generated files go in `.claude/[MM-DD-HH-round-N]/`:
-- `ROUND_STATE.md` -- pipeline state, scores, action lists
-- `DISCUSSION_THREAD.md` -- panel discussion
+All generated files go in `.claude/papr-[MM-DD-HH]/`:
+- `ROUND_STATE.md` -- pipeline state, scores, action lists (all rounds appended)
+- `DISCUSSION_THREAD.md` -- panel discussion (overwritten each round for independent scoring)
 - `wave1_*.md`, `wave2_*.md` -- temp agent outputs (deleted after merge)
 
-A symlink `.claude/latest` always points to the current round directory.
+One directory per pipeline run, NOT per round. A symlink `.claude/latest` points to it.
 
 ## On invocation
 
 IMPORTANT: Do NOT explore the filesystem. Do NOT run `ls`. Do NOT search with multiple patterns. Follow these exact steps:
 
 1. The user provides `paper_dir` as an argument (e.g. `Gauge_Paper`). If not given, ask: "Which folder is your LaTeX project?" and wait for answer. Do NOT guess or search.
-2. Create the output directory: `.claude/[MM-DD-HH-round-1]/` (use current date/time).
-3. Create or update symlink: `ln -sfn [MM-DD-HH-round-1] .claude/latest`
-4. Read `.claude/latest/ROUND_STATE.md` if it exists (ignore error if not found).
-5. Write `.claude/latest/ROUND_STATE.md`:
+2. Run: `mkdir -p .claude/papr-$(date +%m-%d-%H)` to create output directory.
+3. Run: `ln -sfn papr-$(date +%m-%d-%H) .claude/latest` to set symlink.
+4. Write `.claude/latest/ROUND_STATE.md`:
 ```
 # Pipeline State
 ## Paper: [paper_dir]
@@ -53,18 +52,13 @@ IMPORTANT: Do NOT explore the filesystem. Do NOT run `ls`. Do NOT search with mu
 ## Completed: 0
 ## Scores: []
 ```
-6. Write `.claude/latest/DISCUSSION_THREAD.md` with empty content.
-7. Start the round loop immediately.
+5. Write `.claude/latest/DISCUSSION_THREAD.md` with empty content.
+6. Start the round loop immediately.
 
 ## Round loop
 
 ```
 for round in 1..N:
-    # Update output dir for new round
-    mkdir .claude/[MM-DD-HH-round-{round}]/
-    cp .claude/latest/ROUND_STATE.md to new dir
-    ln -sfn [MM-DD-HH-round-{round}] .claude/latest
-
     invoke /papr-panel [paper_dir]
     read .claude/latest/ROUND_STATE.md for action list
     if action list has "requires new experiment":
@@ -72,12 +66,14 @@ for round in 1..N:
     invoke /papr-write [paper_dir]
     invoke /papr-review [paper_dir]
     read .claude/latest/ROUND_STATE.md for score
-    update ROUND_STATE.md (increment completed, append score)
+    append "## Round [round] complete. Score: [X]/10" to ROUND_STATE.md
     if score >= 9: stop, say "Paper ready."
     if round < N: ask user "Ready for round [next]?"
 ```
 
 To invoke each skill, use the Skill tool: `skill: "papr-panel", args: "[paper_dir]"`.
+
+IMPORTANT: Do NOT create new directories between rounds. All rounds write to the same `.claude/latest/` directory. ROUND_STATE.md accumulates all rounds. DISCUSSION_THREAD.md is overwritten fresh by each panel invocation.
 
 ## On `status`
 
