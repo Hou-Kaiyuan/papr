@@ -47,10 +47,11 @@ The human is only consulted between rounds (to approve continuing) and for ESCAL
 
 ## Initialization (`start`)
 
-1. If `paper_dir` was provided, use it. Otherwise ask: "Which folder is your LaTeX project? (e.g. `paper/Vivar`)"
-2. Find the main .tex file in that folder: use Glob for `[paper_dir]/*.tex` (NOT recursive). Pick the one containing `\documentclass`. Note the path.
-3. Read `agent-protocol.md`
-4. Create `ROUND_STATE.md`:
+Do exactly these steps. Do NOT read any other files. Do NOT run `ls` or `head` or verify anything extra.
+
+1. If `paper_dir` was provided, use it. Otherwise ask: "Which folder is your LaTeX project?"
+2. Find the main .tex file: Glob for `[paper_dir]/*.tex` (NOT recursive). Pick the one named `main.tex` (or the first result if no main.tex).
+3. Create `ROUND_STATE.md` in `paper_dir`:
 
 ```markdown
 # Research Pipeline State
@@ -62,14 +63,14 @@ The human is only consulted between rounds (to approve continuing) and for ESCAL
 ## Score history: []
 ```
 
-5. Create empty `DISCUSSION_THREAD.md`
-6. Proceed immediately to Round 1
+4. Create empty `DISCUSSION_THREAD.md` in `paper_dir`
+5. Proceed immediately to Round 1 — read `phases/scout.md` and execute it
 
 ---
 
 ## Per-Round Phases
 
-Run in order. Read each phase file when you reach it.
+Run in order. Read ONLY the current phase file — do NOT pre-read later phases or any other files.
 
 | Phase | File | What it does |
 |---|---|---|
