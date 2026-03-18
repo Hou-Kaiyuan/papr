@@ -1,6 +1,6 @@
 # Phase 2: Inspect
 
-Runs `inspect` and `storyline` in sequence.
+
 
 ## Steps
 

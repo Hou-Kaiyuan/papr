@@ -1,6 +1,6 @@
 # Phase 7: External Review
 
-Invokes `external-review` via Codex MCP on the finished paper.
+
 
 ## Strict Isolation Rule
 
@@ -13,7 +13,7 @@ author identity, or any framing suggesting this is a revised version.
 
 ## Steps
 
-1. Prepare isolated prompt (see `external-review` skill for exact template)
+1. Prepare isolated prompt: ask Codex to review the paper as a top-venue reviewer, structured as Summary / Strengths / Weaknesses / Questions / Missing Comparisons / Score 1-10
 2. Send via Codex MCP
 3. Receive review
 4. Append full review to `ROUND_STATE.md` under `## External Review — Round [N]`

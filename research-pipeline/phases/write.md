@@ -1,6 +1,6 @@
 # Phase 5: Write
 
-Invokes `write` with the AUTHOR action list and any experiment results.
+
 
 ## Steps
 

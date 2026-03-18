@@ -1,6 +1,6 @@
 # Phase 1: Scout
 
-Uses `scout` skill.
+
 
 ## Steps
 

@@ -1,6 +1,6 @@
 # Phase 3: Panel
 
-Invokes `discussion-panel` with the Round Briefing as context.
+
 
 ## Steps
 

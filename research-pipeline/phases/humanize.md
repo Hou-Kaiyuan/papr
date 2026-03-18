@@ -1,6 +1,6 @@
 # Phase 6: Humanize
 
-Invokes `humanize` on all sections modified in Phase 5.
+
 
 ## Steps
 
