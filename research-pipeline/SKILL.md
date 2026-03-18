@@ -25,7 +25,7 @@ The human is only consulted between rounds (to approve continuing) and for ESCAL
 | `/research-pipeline panel` | Run Phase 3 only (discussion-panel) |
 | `/research-pipeline experiments` | Run Phase 4 only (if experiments needed) |
 | `/research-pipeline write` | Run Phase 5 only (write) |
-| `/research-pipeline humanize` | Run Phase 6 only (humanizer) |
+| `/research-pipeline humanize` | Run Phase 6 only (humanize) |
 | `/research-pipeline review` | Run Phase 7 only (external-review) |
 | `/research-pipeline summary` | Run Phase 8 only (write round summary) |
 
@@ -62,7 +62,7 @@ See detailed instructions in each phase file:
 | 3. Panel | `phases/panel.md` | `discussion-panel` (autonomous) |
 | 4. Experiments | `phases/experiments.md` | `experiments` + `code-inspect` |
 | 5. Write | `phases/write.md` | `write` |
-| 6. Humanize | `phases/humanize.md` | `humanizer` |
+| 6. Humanize | `phases/humanize.md` | `humanize` |
 | 7. External Review | `phases/review.md` | `external-review` (Codex MCP) |
 | 8. Summary | `phases/summary.md` | writes to `ROUND_STATE.md` |
 

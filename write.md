@@ -3,7 +3,7 @@
 
 Implements agreed text changes to the paper. This agent edits — it does not discuss.
 
-**Always trigger `humanizer` after all edits in a session are complete. Never mid-edit.**
+**Always trigger `humanize` after all edits in a session are complete. Never mid-edit.**
 
 
 ## Change Priority Order
@@ -43,5 +43,5 @@ Apply in this sequence to avoid line-number conflicts:
 
 When all edits are complete:
 1. Confirm all changes are logged in `ROUND_STATE.md`
-2. List sections modified → these are the input to `humanizer`
+2. List sections modified → these are the input to `humanize`
 3. Signal: "Ready for humanizer. Modified sections: [list]"

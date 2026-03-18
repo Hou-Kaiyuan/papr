@@ -1,11 +1,11 @@
 # Phase 6: Humanize
 
-Invokes `humanizer` on all sections modified in Phase 5.
+Invokes `humanize` on all sections modified in Phase 5.
 
 ## Steps
 
 1. Read the list of modified sections from `ROUND_STATE.md` (added by write)
-2. Run `humanizer` on each modified section
+2. Run `humanize` on each modified section
 3. Confirm after each section: `grep "—"` returns zero results
 
 ## Scope
