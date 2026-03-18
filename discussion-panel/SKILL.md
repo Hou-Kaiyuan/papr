@@ -8,7 +8,7 @@ description: Fully autonomous multi-agent paper review panel. Invoke as `/discus
 Runs a fully autonomous multi-agent discussion on a paper. All roles are agents.
 The human sees only the final summary.
 
-**Read `agent-protocol/SKILL.md` first.**
+**Read `agent-protocol.md` first.**
 
 ---
 
@@ -26,7 +26,7 @@ The human sees only the final summary.
 
 ## Setup (full session)
 
-1. Read `agent-protocol/SKILL.md`
+1. Read `agent-protocol.md`
 2. Read role definitions from `roles/` (see below)
 3. Locate paper file (PDF or LaTeX source)
 4. Create or append to `DISCUSSION_THREAD.md` and `ROUND_STATE.md`

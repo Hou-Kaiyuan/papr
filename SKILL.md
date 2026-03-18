@@ -1,6 +1,23 @@
 ---
 name: papr
-description: Autonomous paper improvement system for academic ML/CV research. Invoke as /papr <subcommand> [args]. Subcommands: pipeline (full end-to-end loop), panel (autonomous review panel), inspect (format/quality audit), storyline (narrative logic check), write (implement text changes), humanize (remove AI writing patterns), scout (find missing baselines/citations), experiments (design experiments from feedback), code-inspect (verify eval correctness), external-review (blind review via Codex MCP).
+description: |
+  Autonomous paper improvement system for academic ML/CV research.
+  Invoke as /papr <subcommand> [args]. Core workflows: pipeline (full
+  multi-round improvement loop), panel (autonomous review panel),
+  write (implement text changes), humanize (remove AI writing patterns).
+  Also: inspect, storyline, scout, experiments, external-review.
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Bash
+  - WebSearch
+  - WebFetch
+  - Agent
+  - mcp__codex__codex
+  - mcp__codex__codex-reply
 ---
 
 # PAPR — Paper Autonomous Pipeline Review
@@ -24,7 +41,6 @@ When invoked as `/papr <subcommand> [args]`, read the corresponding file and fol
 | `humanize` | `humanize.md` | `/papr humanize all` |
 | `scout` | `scout.md` | `/papr scout` |
 | `experiments` | `experiments.md` | `/papr experiments` |
-| `code-inspect` | `code-inspect.md` | `/papr code-inspect` |
 | `external-review` | `external-review.md` | `/papr external-review` |
 
 Pass any additional arguments (e.g. `start`, `score`, `all`, `focus <topic>`) directly to the loaded file as its subcommand input.
@@ -34,19 +50,12 @@ Pass any additional arguments (e.g. `start`, `score`, `all`, `focus <topic>`) di
 ## Quick Reference
 
 ```
-# Run full 3-round improvement loop
+# Full multi-round improvement (the main workflow)
 /papr pipeline start
 
-# Run just the review panel
+# Review panel only
 /papr panel
-
-# Panel — scores only, no discussion
 /papr panel score
-
-# Panel — single role turn
-/papr panel role ADVISOR
-
-# Panel — focused on a specific topic
 /papr panel focus "introduction motivation"
 
 # Run one pipeline phase manually
@@ -61,8 +70,7 @@ Pass any additional arguments (e.g. `start`, `score`, `all`, `focus <topic>`) di
 /papr inspect                    # format/figure/table audit
 /papr storyline                  # narrative logic check
 /papr scout                      # find missing baselines
-/papr experiments                # design experiments from feedback
-/papr code-inspect               # verify eval code before running
+/papr experiments                # design + verify experiments
 /papr external-review            # blind review via Codex MCP
 /papr write                      # implement text changes
 /papr humanize all               # remove AI writing patterns
@@ -84,18 +92,17 @@ File: `agent-protocol.md`
 
 ```
 papr/
-├── SKILL.md                         ← you are here
-├── agent-protocol.md                ← shared message bus protocol
+├── SKILL.md                         <- you are here
+├── agent-protocol.md                <- shared message bus protocol
 ├── inspect.md
 ├── storyline.md
-├── experiments.md
-├── code-inspect.md
+├── experiments.md                   <- design + code verification
 ├── external-review.md
 ├── write.md
 ├── scout.md
 ├── humanize.md
 ├── discussion-panel/
-│   ├── SKILL.md                     ← panel router + turn sequence
+│   ├── SKILL.md                     <- panel router + turn sequence
 │   └── roles/
 │       ├── advisor.md
 │       ├── reviewer-expert.md
@@ -103,7 +110,7 @@ papr/
 │       ├── reviewer-lay.md
 │       └── author.md
 └── research-pipeline/
-    ├── SKILL.md                     ← pipeline router + phase sequence
+    ├── SKILL.md                     <- pipeline router + phase sequence
     └── phases/
         ├── scout.md
         ├── inspect.md

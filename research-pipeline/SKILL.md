@@ -9,7 +9,7 @@ End-to-end autonomous paper improvement. Default: 3 rounds.
 Each round ends with a score /10 and a summary of what changed.
 The human is only consulted between rounds (to approve continuing) and for ESCALATE issues.
 
-**Read `agent-protocol/SKILL.md` before starting.**
+**Read `agent-protocol.md` before starting.**
 
 ---
 
@@ -33,7 +33,7 @@ The human is only consulted between rounds (to approve continuing) and for ESCAL
 
 ## Initialization (`start`)
 
-1. Read `agent-protocol/SKILL.md`
+1. Read `agent-protocol.md`
 2. Confirm paper location and number of rounds (default: 3)
 3. Create `ROUND_STATE.md`:
 
@@ -60,7 +60,7 @@ See detailed instructions in each phase file:
 | 1. Scout | `phases/scout.md` | `scout` |
 | 2. Inspect | `phases/inspect.md` | `inspect` + `storyline` |
 | 3. Panel | `phases/panel.md` | `discussion-panel` (autonomous) |
-| 4. Experiments | `phases/experiments.md` | `experiments` + `code-inspect` |
+| 4. Experiments | `phases/experiments.md` | `experiments` (design + verify) |
 | 5. Write | `phases/write.md` | `write` |
 | 6. Humanize | `phases/humanize.md` | `humanize` |
 | 7. External Review | `phases/review.md` | `external-review` (Codex MCP) |

@@ -1,6 +1,6 @@
 # PAPR — Paper Autonomous Pipeline Review
 
-A Claude Code skill that orchestrates all aspects of academic paper improvement through autonomous multi-agent review and iterative refinement.
+A Claude Code skill for autonomous academic paper improvement. Multi-agent review panels, iterative refinement, and AI writing removal in one pipeline.
 
 ## Install
 
@@ -8,80 +8,90 @@ A Claude Code skill that orchestrates all aspects of academic paper improvement 
 cp -r papr ~/.claude/skills/
 ```
 
-## Usage
+## Core Workflows
+
+### Pipeline — full multi-round improvement
+
+The main workflow. Runs up to 3 rounds of autonomous improvement, each scored out of 10. Stops early at 9+.
 
 ```bash
-# Run full 3-round improvement loop
-/papr pipeline start
-
-# Run the autonomous review panel
-/papr panel
-
-# Standalone tools
-/papr inspect          # format/figure/table audit
-/papr storyline        # narrative logic check
-/papr scout            # find missing baselines/citations
-/papr experiments      # design experiments from feedback
-/papr code-inspect     # verify eval code correctness
-/papr external-review  # blind review via Codex MCP
-/papr write            # implement text changes
-/papr humanize all     # remove AI writing patterns
+/papr pipeline start                # begin full loop
+/papr pipeline status               # check score and progress
+/papr pipeline round                # run next round manually
 ```
 
-## Subcommands
+Each round runs: Scout → Inspect → Panel → Experiments (if needed) → Write → Humanize → External Review → Summary.
 
-| Subcommand | Description |
-|---|---|
-| `pipeline` | Full end-to-end multi-round improvement loop |
-| `panel` | Autonomous multi-agent review panel |
-| `inspect` | Format, figure, and table quality audit |
-| `storyline` | Narrative and logical flow check |
-| `write` | Implement text changes to the paper |
-| `humanize` | Detect and remove AI writing patterns |
-| `scout` | Find missing baselines and citations |
-| `experiments` | Design experiments from reviewer feedback |
-| `code-inspect` | Verify evaluation code correctness |
-| `external-review` | Blind review via Codex MCP |
+### Panel — autonomous review
 
-## How It Works
+5 agents (Advisor, Expert Reviewer, Standard Reviewer, Lay Reviewer, Author) discuss your paper autonomously. You see only the final summary with scores and an action list.
 
-**Pipeline** runs up to 3 rounds of improvement. Each round:
+```bash
+/papr panel                         # full 7-turn session
+/papr panel score                   # scores only, no discussion
+/papr panel focus "related work"    # focused session
+```
 
-1. **Scout** — find missing related work and baselines
-2. **Inspect** — audit formatting, figures, tables, and narrative
-3. **Panel** — autonomous multi-agent discussion (Advisor, Expert/Standard/Lay Reviewers, Author)
-4. **Experiments** — design new experiments if needed
-5. **Write** — implement text changes
-6. **Humanize** — remove AI writing artifacts
-7. **External Review** — blind review via Codex MCP
-8. **Summary** — score and round summary
+### Write + Humanize — revision
 
-The pipeline stops early if the score reaches 9+/10.
+Implement changes from the panel's action list, then remove AI writing patterns.
+
+```bash
+/papr write                         # apply text changes
+/papr humanize all                  # remove AI writing patterns
+/papr humanize check                # scan without changing
+```
+
+## Other Tools
+
+```bash
+/papr inspect                       # format/figure/table audit
+/papr storyline                     # narrative logic check
+/papr scout                         # find missing baselines/citations
+/papr experiments                   # design + verify experiments
+/papr external-review               # blind review via Codex MCP
+```
+
+## How the Pipeline Works
+
+```
+Round N (repeat up to 3x)
+│
+├─ 1. Scout        find missing related work and baselines
+├─ 2. Inspect      audit formatting, figures, tables, narrative
+├─ 3. Panel        autonomous multi-agent review discussion
+├─ 4. Experiments  design + verify new experiments (if needed)
+├─ 5. Write        implement all text changes
+├─ 6. Humanize     remove AI writing artifacts
+├─ 7. Review       blind external review via Codex MCP
+└─ 8. Summary      score, log changes, decide next round
+```
+
+Human is consulted only between rounds and for escalated issues.
 
 ## File Structure
 
 ```
 papr/
-├── SKILL.md                         # main entry point
-├── agent-protocol.md                # shared message bus protocol
-├── inspect.md
-├── storyline.md
-├── experiments.md
-├── code-inspect.md
-├── external-review.md
-├── write.md
-├── scout.md
-├── humanize.md
+├── SKILL.md                         # entry point + routing
+├── agent-protocol.md                # shared multi-agent protocol
+├── inspect.md                       # format/quality audit
+├── storyline.md                     # narrative logic check
+├── experiments.md                   # experiment design + code verification
+├── external-review.md               # blind review via Codex MCP
+├── write.md                         # text change implementation
+├── scout.md                         # missing baselines/citations
+├── humanize.md                      # AI writing pattern removal
 ├── discussion-panel/
 │   ├── SKILL.md                     # panel router + turn sequence
 │   └── roles/
-│       ├── advisor.md
-│       ├── reviewer-expert.md
-│       ├── reviewer-standard.md
-│       ├── reviewer-lay.md
-│       └── author.md
+│       ├── advisor.md               # senior professor perspective
+│       ├── reviewer-expert.md       # domain expert review
+│       ├── reviewer-standard.md     # area chair level review
+│       ├── reviewer-lay.md          # non-expert accessibility
+│       └── author.md                # paper defense + action list
 └── research-pipeline/
-    ├── SKILL.md                     # pipeline router + phase sequence
+    ├── SKILL.md                     # pipeline router + phases
     └── phases/
         ├── scout.md
         ├── inspect.md
@@ -92,3 +102,8 @@ papr/
         ├── review.md
         └── summary.md
 ```
+
+## Requirements
+
+- [Claude Code](https://claude.ai/code) with skill support
+- Codex MCP server (optional, for `/papr external-review`)
