@@ -26,10 +26,12 @@ End-to-end autonomous paper improvement.
 
 ## On `start [N]` — DO THIS IMMEDIATELY:
 
-**Step 1: Find the paper.**
+**Step 1: Find the paper path (DO NOT read the paper yet).**
 Use Glob to search for `**/*.tex` and `**/*.pdf` in the working directory.
-If multiple found, pick the main paper file (look for `\begin{document}` in .tex files).
+If multiple .tex files found, pick the main one (the one with `\documentclass`).
 If none found, ask the user for the paper path and stop.
+IMPORTANT: Only note the file path. Do NOT read the paper contents yet.
+The paper will be read later, phase by phase, as needed.
 
 **Step 2: Create state files.**
 Write `ROUND_STATE.md`:
@@ -44,7 +46,7 @@ Write `ROUND_STATE.md`:
 Write an empty `DISCUSSION_THREAD.md`.
 
 **Step 3: Start Round 1.**
-Go to "Run a Round" below and execute it.
+Go to "Run a Round" below and execute Phase 1 immediately.
 
 ---
 
@@ -62,44 +64,66 @@ Read `ROUND_STATE.md` and print a summary. Ask user if they want to continue.
 
 ## Run a Round
 
-Execute these 8 phases IN ORDER. Do not skip ahead. Read each phase file
-ONLY when you reach that phase, not before.
+Execute these 8 phases IN ORDER. Do not skip ahead.
+
+IMPORTANT: Read each phase file ONLY when you reach that phase.
+Do NOT pre-read multiple files. Do NOT read the full paper upfront.
+Each phase will tell you what parts of the paper to read.
+
+After completing each phase, say "Phase N complete. Starting Phase N+1."
+Then immediately proceed to the next phase.
 
 ### Phase 1: Scout
-Read `phases/scout.md`, then read the paper and execute the scout instructions.
-Use WebSearch to find missing baselines, verify citations, check novelty.
-Save output as the Round Briefing.
+1. Read `phases/scout.md`
+2. Now read the paper (abstract, intro, related work, evaluation sections)
+3. Execute the scout instructions: use WebSearch to find missing baselines, verify citations, check novelty
+4. Save output as the Round Briefing
+5. Say "Phase 1 complete. Starting Phase 2."
 
 ### Phase 2: Inspect
-Read `phases/inspect.md`, then run the inspect and storyline checklists on the paper.
-Append results to the Round Briefing.
+1. Read `phases/inspect.md`
+2. Read the paper sections needed for format/storyline checks
+3. Run the inspect and storyline checklists
+4. Append results to the Round Briefing
+5. Say "Phase 2 complete. Starting Phase 3."
 
 ### Phase 3: Panel
-Read `phases/panel.md`, then run the discussion panel.
-Write Round Briefing to `DISCUSSION_THREAD.md` as Wave 0.
-Read `discussion-panel/SKILL.md` for orchestration instructions.
-Spawn all 6 agents in parallel for Wave 1, merge results, then Wave 2, merge results.
-Extract: average score, AUTHOR action list.
+1. Read `phases/panel.md`
+2. Write Round Briefing to `DISCUSSION_THREAD.md` as Wave 0
+3. Read `discussion-panel/SKILL.md` for orchestration instructions
+4. Spawn all 6 agents in parallel (Wave 1), wait, merge results
+5. Spawn all 6 agents again (Wave 2), wait, merge results
+6. Extract: average score, AUTHOR action list
+7. Say "Phase 3 complete. Starting Phase 4."
 
 ### Phase 4: Experiments (conditional)
-Read `phases/experiments.md`. If the AUTHOR action list has items marked
-"requires new experiment", design and verify experiments. Otherwise skip to Phase 5.
+1. Check AUTHOR action list for items marked "requires new experiment"
+2. If none: say "No experiments needed. Skipping to Phase 5."
+3. If yes: read `phases/experiments.md`, design and verify experiments
 
 ### Phase 5: Write
-Read `phases/write.md`, then implement all text changes from the action list.
-Log every change to `ROUND_STATE.md`.
+1. Read `phases/write.md`
+2. Implement all text changes from the action list
+3. Log every change to `ROUND_STATE.md`
+4. Say "Phase 5 complete. Starting Phase 6."
 
 ### Phase 6: Humanize
-Read `phases/humanize.md`, then run humanize on all sections modified in Phase 5.
-Verify: `grep` for em dashes returns zero results in modified sections.
+1. Read `phases/humanize.md`
+2. Run humanize on all sections modified in Phase 5
+3. Verify: grep for em dashes returns zero in modified sections
+4. Say "Phase 6 complete. Starting Phase 7."
 
 ### Phase 7: External Review
-Read `phases/review.md`. If Codex MCP is available, send paper for blind review.
-If unavailable, note "External review skipped" in `ROUND_STATE.md` and continue.
+1. Read `phases/review.md`
+2. If Codex MCP is available: send paper for blind review
+3. If unavailable: note "External review skipped" in `ROUND_STATE.md`
+4. Say "Phase 7 complete. Starting Phase 8."
 
 ### Phase 8: Summary
-Read `phases/summary.md`, then write the round summary to `ROUND_STATE.md`.
-Present summary to user. Check stopping conditions.
+1. Read `phases/summary.md`
+2. Write round summary to `ROUND_STATE.md`
+3. Present summary to user
+4. Check stopping conditions
 
 ---
 
