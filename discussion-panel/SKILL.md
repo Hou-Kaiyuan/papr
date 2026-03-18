@@ -64,23 +64,21 @@ each agent isolated context — they only see what their role should see.
 
 Spawn ALL 6 agents simultaneously using the Agent tool with `run_in_background: true`.
 
-Each agent's prompt must include:
-- Their role instructions (from `roles/<role>.md`)
-- The paper content (scoped to what their role reads)
-- Path to `DISCUSSION_THREAD.md` (append their output)
-- Instruction: "Write your initial review/perspective. Append to DISCUSSION_THREAD.md using the agent-protocol format."
+Each agent writes to its own file to avoid race conditions:
 
 ```
 Spawn in parallel:
-  Agent(ADVISOR,          run_in_background: true)
-  Agent(REVIEWER_EXPERT,  run_in_background: true)
-  Agent(REVIEWER_STANDARD,run_in_background: true)
-  Agent(REVIEWER_BRIEF,   run_in_background: true)
-  Agent(REVIEWER_LAY,     run_in_background: true)
-  Agent(AUTHOR,           run_in_background: true)
+  Agent(ADVISOR)           -> writes to wave1_advisor.md
+  Agent(REVIEWER_EXPERT)   -> writes to wave1_expert.md
+  Agent(REVIEWER_STANDARD) -> writes to wave1_standard.md
+  Agent(REVIEWER_BRIEF)    -> writes to wave1_brief.md
+  Agent(REVIEWER_LAY)      -> writes to wave1_lay.md
+  Agent(AUTHOR)            -> writes to wave1_author.md
 ```
 
-Wait for ALL agents to complete before proceeding to Wave 2.
+Wait for ALL agents to complete.
+
+**Merge:** Append all `wave1_*.md` files into `DISCUSSION_THREAD.md`, then delete the temp files.
 
 In Wave 1, the AUTHOR writes a preemptive defense: acknowledges known weaknesses,
 flags areas where reviewers are likely to push back, and outlines what can be fixed.
@@ -89,20 +87,22 @@ flags areas where reviewers are likely to push back, and outlines what can be fi
 
 Spawn ALL 6 agents again simultaneously with `run_in_background: true`.
 
-Each agent now reads the full `DISCUSSION_THREAD.md` (containing all Wave 1 output)
-and responds to specific points raised by others.
+Each agent reads `DISCUSSION_THREAD.md` (now containing all Wave 1 output)
+and writes to its own file:
 
 ```
 Spawn in parallel:
-  Agent(ADVISOR,          run_in_background: true)  -> synthesize, assign scores
-  Agent(REVIEWER_EXPERT,  run_in_background: true)  -> challenge author defenses
-  Agent(REVIEWER_STANDARD,run_in_background: true)  -> respond to cross-cutting issues
-  Agent(REVIEWER_BRIEF,   run_in_background: true)  -> flag main-text gaps others missed
-  Agent(REVIEWER_LAY,     run_in_background: true)  -> respond to clarity issues
-  Agent(AUTHOR,           run_in_background: true)  -> address all concerns, post action list
+  Agent(ADVISOR)           -> writes to wave2_advisor.md       (synthesize, assign scores)
+  Agent(REVIEWER_EXPERT)   -> writes to wave2_expert.md        (challenge author defenses)
+  Agent(REVIEWER_STANDARD) -> writes to wave2_standard.md      (respond to cross-cutting issues)
+  Agent(REVIEWER_BRIEF)    -> writes to wave2_brief.md         (flag main-text gaps others missed)
+  Agent(REVIEWER_LAY)      -> writes to wave2_lay.md           (respond to clarity issues)
+  Agent(AUTHOR)            -> writes to wave2_author.md        (address all concerns, post action list)
 ```
 
 Wait for ALL agents to complete.
+
+**Merge:** Append all `wave2_*.md` files into `DISCUSSION_THREAD.md`, then delete the temp files.
 
 ### Agent Prompt Template
 
@@ -118,14 +118,14 @@ You are [ROLE] in an academic paper review panel.
 [paste paper content, scoped to what this role reads]
 
 ## Discussion Thread So Far
-[paste current DISCUSSION_THREAD.md content, or "Empty — you are writing first" for Wave 1]
+[paste current DISCUSSION_THREAD.md content, or "Empty" for Wave 1]
 
 ## Your Task (Wave [1|2])
 Wave 1: Write your initial review from your role's perspective.
 Wave 2: Read all other agents' comments and respond. Address specific points by name.
 
 ## Output
-Append your response to DISCUSSION_THREAD.md at path [absolute path].
+Write your response to [absolute path to wave[N]_[role].md].
 Use this format:
 
 ---
