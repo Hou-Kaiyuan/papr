@@ -23,7 +23,7 @@ allowed-tools:
 # PAPR — Paper Autonomous Pipeline Review
 
 A single skill that orchestrates all aspects of academic paper improvement.
-Install: `cp -r papr ~/.claude/skills/`
+Install: `git clone https://github.com/Hou-Kaiyuan/papr.git ~/.claude/skills/papr`
 
 ---
 

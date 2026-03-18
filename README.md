@@ -5,10 +5,27 @@ A Claude Code skill for autonomous academic paper improvement. Multi-agent revie
 ## Install
 
 ```bash
-cp -r papr ~/.claude/skills/
+git clone https://github.com/Hou-Kaiyuan/papr.git ~/.claude/skills/papr
 ```
 
-## Core Workflows
+### Codex MCP Setup (for external review)
+
+The `external-review` phase uses OpenAI Codex as a blind reviewer via MCP. This gives you an independent second opinion from a different AI model.
+
+```bash
+# 1. Install and authenticate Codex CLI
+npm install -g @openai/codex
+codex setup
+
+# 2. Register as MCP server in Claude Code
+claude mcp add codex -s user -- codex mcp-server
+```
+
+Verify with `claude mcp list` or `/mcp` inside Claude Code. The pipeline works without Codex, it just skips the external review phase.
+
+---
+
+## Usage
 
 ### Pipeline — full multi-round improvement
 
@@ -21,29 +38,36 @@ The main workflow. Runs multiple rounds of autonomous improvement, each scored o
 /papr pipeline round                # run next round manually
 ```
 
-Each round runs: Scout → Inspect → Panel → Experiments (if needed) → Write → Humanize → External Review → Summary.
+Each round: Scout, Inspect, Panel, Experiments (if needed), Write, Humanize, External Review, Summary.
 
-### Panel — autonomous review
+### Panel — parallel multi-agent review
 
-6 agents (Advisor, Expert, Standard, Brief, Lay, Author) review your paper in parallel — like sitting in the same room. Two waves: independent perspectives, then cross-discussion. You see only the final summary with scores and an action list.
+6 agents review your paper simultaneously in two waves. Wave 1: independent perspectives. Wave 2: cross-discussion. You see the final summary with scores and an action list.
+
+| Agent | Reads | Perspective |
+|---|---|---|
+| Advisor | Full paper | Senior professor, big-picture framing |
+| Expert | Full paper | Domain expert, technical rigor |
+| Standard | Full paper | Area chair, overall quality |
+| Brief | Main text only | Busy reviewer, self-containedness |
+| Lay | Full paper | Non-expert, accessibility |
+| Author | Full paper + thread | Defends paper, posts action list |
 
 ```bash
 /papr panel                         # full 2-wave parallel session
-/papr panel score                   # scores only, no discussion
+/papr panel score                   # scores only
 /papr panel focus "related work"    # focused session
 ```
 
 ### Write + Humanize — revision
 
-Implement changes from the panel's action list, then remove AI writing patterns.
-
 ```bash
-/papr write                         # apply text changes
-/papr humanize all                  # remove AI writing patterns
+/papr write                         # apply text changes from action list
+/papr humanize all                  # remove AI writing patterns (24 checks)
 /papr humanize check                # scan without changing
 ```
 
-## Other Tools
+### Other tools
 
 ```bash
 /papr inspect                       # format/figure/table audit
@@ -53,38 +77,42 @@ Implement changes from the panel's action list, then remove AI writing patterns.
 /papr external-review               # blind review via Codex MCP
 ```
 
+---
+
 ## How the Pipeline Works
 
 ```
-Round N (repeat up to 3x)
-│
-├─ 1. Scout        find missing related work and baselines
-├─ 2. Inspect      audit formatting, figures, tables, narrative
-├─ 3. Panel        parallel multi-agent review (6 agents, 2 waves)
-├─ 4. Experiments  design + verify new experiments (if needed)
-├─ 5. Write        implement all text changes
-├─ 6. Humanize     remove AI writing artifacts
-├─ 7. Review       blind external review via Codex MCP
-└─ 8. Summary      score, log changes, decide next round
+Round N (repeat up to N rounds, default 3)
+|
+|-- 1. Scout        find missing related work and baselines
+|-- 2. Inspect      audit formatting, figures, tables, narrative
+|-- 3. Panel        parallel multi-agent review (6 agents, 2 waves)
+|-- 4. Experiments  design + verify new experiments (if needed)
+|-- 5. Write        implement all text changes
+|-- 6. Humanize     remove AI writing artifacts
+|-- 7. Review       blind external review via Codex MCP
++-- 8. Summary      score, log changes, decide next round
 ```
 
-Human is consulted only between rounds and for escalated issues.
+Human is consulted only between rounds and for escalated issues. Pipeline stops early if score reaches 9+/10.
+
+---
 
 ## File Structure
 
 ```
 papr/
-├── SKILL.md                         # entry point + routing
-├── agent-protocol.md                # shared multi-agent protocol
+├── SKILL.md                         # entry point + subcommand routing
+├── agent-protocol.md                # shared multi-agent communication protocol
 ├── inspect.md                       # format/quality audit
 ├── storyline.md                     # narrative logic check
 ├── experiments.md                   # experiment design + code verification
 ├── external-review.md               # blind review via Codex MCP
 ├── write.md                         # text change implementation
 ├── scout.md                         # missing baselines/citations
-├── humanize.md                      # AI writing pattern removal
+├── humanize.md                      # AI writing pattern removal (24 patterns)
 ├── discussion-panel/
-│   ├── SKILL.md                     # panel router + turn sequence
+│   ├── SKILL.md                     # panel orchestration (2-wave parallel)
 │   └── roles/
 │       ├── advisor.md               # senior professor, big-picture
 │       ├── reviewer-expert.md       # domain expert, main + appendix
@@ -93,7 +121,7 @@ papr/
 │       ├── reviewer-lay.md          # non-expert, reads everything
 │       └── author.md                # paper defense + action list
 └── research-pipeline/
-    ├── SKILL.md                     # pipeline router + phases
+    ├── SKILL.md                     # pipeline router + phase sequencing
     └── phases/
         ├── scout.md
         ├── inspect.md
@@ -107,5 +135,5 @@ papr/
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/code) with skill support
-- Codex MCP server (optional, for `/papr external-review`)
+- [Claude Code](https://claude.ai/code)
+- [Codex CLI](https://github.com/openai/codex) + MCP server (optional, for external review)
