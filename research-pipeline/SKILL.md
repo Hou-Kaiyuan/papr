@@ -65,24 +65,49 @@ Do exactly these steps. Do NOT read any other files. Do NOT run `ls` or `head` o
 ```
 
 5. Write `[paper_dir]/DISCUSSION_THREAD.md` with empty content.
-6. Proceed immediately to Round 1 — read `phases/scout.md` and execute it.
+6. Read the main .tex file to find all `\input{...}` commands. Note the list of included .tex files.
+7. Proceed immediately to Round 1 Phase 1 below.
 
 ---
 
 ## Per-Round Phases
 
-Run in order. Read ONLY the current phase file — do NOT pre-read later phases or any other files.
+Run in order. For each phase: first read the paper files listed, then read the phase file, then execute.
 
-| Phase | File | What it does |
-|---|---|---|
-| 1. Scout | `phases/scout.md` | Find missing baselines, verify citations, check novelty |
-| 2. Inspect | `phases/inspect.md` | Format + storyline audit |
-| 3. Panel | `phases/panel.md` | Parallel multi-agent review (6 agents, 2 waves) |
-| 4. Experiments | `phases/experiments.md` | Design + verify experiments (conditional) |
-| 5. Write | `phases/write.md` | Implement text changes |
-| 6. Humanize | `phases/humanize.md` | Remove AI writing patterns |
-| 7. External Review | `phases/review.md` | Blind review via Codex MCP |
-| 8. Summary | `phases/summary.md` | Score, log changes, present to user |
+### Phase 1: Scout
+1. Read the paper's abstract and introduction .tex files (find them from the `\input` list in step 6)
+2. Read `phases/scout.md`
+3. Execute the scout instructions using what you read
+
+### Phase 2: Inspect
+1. Read the paper's method, evaluation, and conclusion .tex files
+2. Read `phases/inspect.md`
+3. Execute the inspect instructions
+
+### Phase 3: Panel
+1. Read `phases/panel.md`
+2. Follow its instructions (writes to DISCUSSION_THREAD.md, spawns agents)
+
+### Phase 4: Experiments (conditional)
+1. Check AUTHOR action list for "requires new experiment" items
+2. If none, skip to Phase 5
+3. If yes, read `phases/experiments.md` and execute
+
+### Phase 5: Write
+1. Read `phases/write.md`
+2. Implement changes to the paper files
+
+### Phase 6: Humanize
+1. Read `phases/humanize.md`
+2. Apply to sections modified in Phase 5
+
+### Phase 7: External Review
+1. Read `phases/review.md`
+2. If Codex MCP available, send paper for blind review. If not, skip.
+
+### Phase 8: Summary
+1. Read `phases/summary.md`
+2. Write round summary to ROUND_STATE.md, present to user
 
 ---
 
