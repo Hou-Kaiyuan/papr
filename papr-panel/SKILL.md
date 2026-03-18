@@ -23,9 +23,11 @@ Each agent writes to its own temp file to avoid race conditions.
 
 ## On invocation
 
-1. Locate paper in `[paper_dir]` (Glob for `*.tex`, find main file).
-2. If `[paper_dir]/DISCUSSION_THREAD.md` exists, read it first. Then overwrite with empty content (or append if Round 2+).
-3. If `[paper_dir]/ROUND_STATE.md` exists, read it for previous round context.
+IMPORTANT: Do NOT explore the filesystem. Do NOT run `ls` or `bash test`. Do NOT read all .tex files upfront. The agents will read the paper themselves.
+
+1. Read `[paper_dir]/DISCUSSION_THREAD.md` (ignore error if not found).
+2. Read `[paper_dir]/ROUND_STATE.md` (ignore error if not found).
+3. Immediately start Wave 1 below. Do NOT read the paper .tex files yourself -- each agent reads them in their own context.
 
 ## Wave 1: Independent Reviews (all in parallel)
 
