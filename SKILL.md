@@ -53,8 +53,8 @@ directly to the loaded file as its subcommand input.
 
 ```
 # Full multi-round improvement (the main workflow)
-/papr pipeline start 3 paper/Vivar      # 3 rounds on a LaTeX project folder
-/papr pipeline start 2 paper/Vivar      # 2 rounds
+/papr pipeline start 3 path/to/latex-project      # 3 rounds on a LaTeX project folder
+/papr pipeline start 2 path/to/latex-project      # 2 rounds
 /papr pipeline start                    # default 3 rounds, will ask for folder
 
 # Review panel only

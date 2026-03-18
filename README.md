@@ -32,8 +32,8 @@ Verify with `claude mcp list` or `/mcp` inside Claude Code. The pipeline works w
 The main workflow. Runs multiple rounds of autonomous improvement, each scored out of 10. Stops early at 9+.
 
 ```bash
-/papr pipeline start 3 paper/Vivar      # 3 rounds on a LaTeX project folder
-/papr pipeline start 2 paper/Vivar      # 2 rounds
+/papr pipeline start 3 path/to/latex-project      # 3 rounds on a LaTeX project folder
+/papr pipeline start 2 path/to/latex-project      # 2 rounds
 /papr pipeline start                    # default 3 rounds, will ask for folder
 /papr pipeline status                   # check score and progress
 /papr pipeline round                    # run next round manually
