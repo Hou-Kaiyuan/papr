@@ -11,6 +11,7 @@ allowed-tools:
   - Edit
   - Grep
   - Glob
+  - Bash
   - Agent
   - WebSearch
   - WebFetch
@@ -21,13 +22,20 @@ allowed-tools:
 6 agents review the paper in parallel. Two waves: independent reviews, then cross-discussion.
 Each agent writes to its own temp file to avoid race conditions.
 
+## Scoring Rule
+
+Each round is scored INDEPENDENTLY. Agents must evaluate the paper as-is,
+as if seeing it for the first time. Do NOT show agents previous round scores.
+Do NOT include score history in agent prompts. This prevents score inflation
+from agents seeing "we improved from X to Y."
+
 ## On invocation
 
 IMPORTANT: Do NOT explore the filesystem. Do NOT run `ls` or `bash test`. Do NOT read all .tex files upfront. The agents will read the paper themselves.
 
-1. Read `.claude/latest/DISCUSSION_THREAD.md` (ignore error if not found).
-2. Read `.claude/latest/ROUND_STATE.md` (ignore error if not found).
-3. Immediately start Wave 1 below. Do NOT read the paper .tex files yourself -- each agent reads them in their own context.
+1. Read `.claude/latest/ROUND_STATE.md` (ignore error if not found). Note the action list if present, but do NOT pass previous scores to agents.
+2. Write a fresh `.claude/latest/DISCUSSION_THREAD.md` (empty). Each round gets a clean discussion.
+3. Immediately start Wave 1 below.
 
 ## Wave 1: Independent Reviews (all in parallel)
 
@@ -69,10 +77,15 @@ You are [ROLE] in an academic paper review panel.
 [paste from roles/[role].md]
 
 ## Paper
-[paste paper content, scoped to role's reading scope]
+Read the paper from [paper_dir]. [scope based on role]
 
 ## Discussion So Far
 [DISCUSSION_THREAD.md content, or "Empty" for Wave 1]
+
+## IMPORTANT
+Score the paper independently based on its current state.
+Do NOT reference any previous round scores or prior discussions.
+Evaluate as if this is a fresh submission.
 
 ## Task (Wave [1|2])
 Wave 1: Write your initial review including all checklists from your role.

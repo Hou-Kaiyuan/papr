@@ -8,10 +8,12 @@ description: |
 allowed-tools:
   - Read
   - Write
+  - Edit
   - Grep
   - Glob
-  - WebSearch
   - Bash
+  - WebSearch
+  - Agent
 ---
 
 # Experiment Designer + Verifier

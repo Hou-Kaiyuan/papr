@@ -10,7 +10,9 @@ allowed-tools:
   - Edit
   - Grep
   - Glob
+  - Bash
   - WebSearch
+  - Agent
 ---
 
 # Paper Writer + Humanizer

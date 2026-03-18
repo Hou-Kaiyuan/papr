@@ -8,8 +8,10 @@ description: |
 allowed-tools:
   - Read
   - Write
+  - Edit
   - Grep
   - Glob
+  - Bash
   - mcp__codex__codex
   - mcp__codex__codex-reply
 ---

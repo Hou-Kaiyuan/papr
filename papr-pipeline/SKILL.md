@@ -8,9 +8,15 @@ description: |
 allowed-tools:
   - Read
   - Write
+  - Edit
+  - Grep
   - Glob
   - Bash
   - Agent
+  - WebSearch
+  - WebFetch
+  - mcp__codex__codex
+  - mcp__codex__codex-reply
 ---
 
 # Paper Improvement Pipeline
