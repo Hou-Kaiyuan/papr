@@ -2,7 +2,7 @@
 # Paper Storyline and Logic Check
 
 Evaluates whether the paper's argument is coherent, motivated, and correctly sequenced
-from the perspective of a first-time reader. Does NOT check formatting — that is `paper-quality-inspect`.
+from the perspective of a first-time reader. Does NOT check formatting — that is `inspect`.
 
 
 ## Section-by-Section Checklist

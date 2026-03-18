@@ -2,7 +2,7 @@
 # Paper Quality Inspection
 
 Systematic format and consistency audit. Does NOT evaluate scientific merit —
-that is `paper-storyline` and `discussion-panel`.
+that is `storyline` and `discussion-panel`.
 
 Severity: **BLOCKER** (fix before submission) | **MAJOR** | **MINOR**
 

@@ -45,7 +45,7 @@ For every reviewer point, classify it as exactly one of:
 > - [ ] [change] — from [ROLE] TURN [T]
 >
 > ### Will fix — requires new experiment
-> - [ ] [description] → pass to experiment-designer
+> - [ ] [description] → pass to experiments
 >
 > ### Will clarify in text
 > - [ ] [description]

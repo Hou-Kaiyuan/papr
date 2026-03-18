@@ -1,11 +1,11 @@
 # Phase 2: Inspect
 
-Runs `paper-quality-inspect` and `paper-storyline` in sequence.
+Runs `inspect` and `storyline` in sequence.
 
 ## Steps
 
-1. Run `paper-quality-inspect`: format, figures, tables, citations, terms, structure
-2. Run `paper-storyline`: narrative logic, claim-to-experiment map, transition failures
+1. Run `inspect`: format, figures, tables, citations, terms, structure
+2. Run `storyline`: narrative logic, claim-to-experiment map, transition failures
 
 ## Output
 

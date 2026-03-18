@@ -1,6 +1,6 @@
 # Phase 1: Scout
 
-Uses `related-work-scout` skill.
+Uses `scout` skill.
 
 ## Steps
 
@@ -37,5 +37,5 @@ Append to Round Briefing:
 - [paper]: similar because [description]
 
 ### Actions
-- [finding] → [route to: experiment-designer | paper-writer | discussion-panel]
+- [finding] → [route to: experiments | write | discussion-panel]
 ```

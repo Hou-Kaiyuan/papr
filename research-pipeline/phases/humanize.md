@@ -4,7 +4,7 @@ Invokes `humanizer` on all sections modified in Phase 5.
 
 ## Steps
 
-1. Read the list of modified sections from `ROUND_STATE.md` (added by paper-writer)
+1. Read the list of modified sections from `ROUND_STATE.md` (added by write)
 2. Run `humanizer` on each modified section
 3. Confirm after each section: `grep "—"` returns zero results
 

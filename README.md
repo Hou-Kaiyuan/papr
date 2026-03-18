@@ -64,14 +64,14 @@ The pipeline stops early if the score reaches 9+/10.
 papr/
 ├── SKILL.md                         # main entry point
 ├── agent-protocol.md                # shared message bus protocol
-├── paper-quality-inspect.md
-├── paper-storyline.md
-├── experiment-designer.md
-├── code-inspector.md
-├── external-reviewer.md
-├── paper-writer.md
-├── related-work-scout.md
-├── humanizer.md
+├── inspect.md
+├── storyline.md
+├── experiments.md
+├── code-inspect.md
+├── external-review.md
+├── write.md
+├── scout.md
+├── humanize.md
 ├── discussion-panel/
 │   ├── SKILL.md                     # panel router + turn sequence
 │   └── roles/

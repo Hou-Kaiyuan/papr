@@ -20,13 +20,13 @@ The human is only consulted between rounds (to approve continuing) and for ESCAL
 | `/research-pipeline start` | Initialize state files, begin Round 1 |
 | `/research-pipeline round` | Run the next full round (reads current state) |
 | `/research-pipeline status` | Print `ROUND_STATE.md` summary and current score |
-| `/research-pipeline scout` | Run Phase 1 only (related-work-scout) |
+| `/research-pipeline scout` | Run Phase 1 only (scout) |
 | `/research-pipeline inspect` | Run Phase 2 only (quality + storyline) |
 | `/research-pipeline panel` | Run Phase 3 only (discussion-panel) |
 | `/research-pipeline experiments` | Run Phase 4 only (if experiments needed) |
-| `/research-pipeline write` | Run Phase 5 only (paper-writer) |
+| `/research-pipeline write` | Run Phase 5 only (write) |
 | `/research-pipeline humanize` | Run Phase 6 only (humanizer) |
-| `/research-pipeline review` | Run Phase 7 only (external-reviewer) |
+| `/research-pipeline review` | Run Phase 7 only (external-review) |
 | `/research-pipeline summary` | Run Phase 8 only (write round summary) |
 
 ---
@@ -57,13 +57,13 @@ See detailed instructions in each phase file:
 
 | Phase | File | Skill used |
 |---|---|---|
-| 1. Scout | `phases/scout.md` | `related-work-scout` |
-| 2. Inspect | `phases/inspect.md` | `paper-quality-inspect` + `paper-storyline` |
+| 1. Scout | `phases/scout.md` | `scout` |
+| 2. Inspect | `phases/inspect.md` | `inspect` + `storyline` |
 | 3. Panel | `phases/panel.md` | `discussion-panel` (autonomous) |
-| 4. Experiments | `phases/experiments.md` | `experiment-designer` + `code-inspector` |
-| 5. Write | `phases/write.md` | `paper-writer` |
+| 4. Experiments | `phases/experiments.md` | `experiments` + `code-inspect` |
+| 5. Write | `phases/write.md` | `write` |
 | 6. Humanize | `phases/humanize.md` | `humanizer` |
-| 7. External Review | `phases/review.md` | `external-reviewer` (Codex MCP) |
+| 7. External Review | `phases/review.md` | `external-review` (Codex MCP) |
 | 8. Summary | `phases/summary.md` | writes to `ROUND_STATE.md` |
 
 ---

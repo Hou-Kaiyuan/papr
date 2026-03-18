@@ -1,15 +1,15 @@
 # Phase 5: Write
 
-Invokes `paper-writer` with the AUTHOR action list and any experiment results.
+Invokes `write` with the AUTHOR action list and any experiment results.
 
 ## Steps
 
 1. Collect inputs:
    - AUTHOR action list (text-only items) from `DISCUSSION_THREAD.md`
    - Experiment results from Phase 4 (if any)
-   - Quality issues from `paper-quality-inspect` (BLOCKER + MAJOR items)
+   - Quality issues from `inspect` (BLOCKER + MAJOR items)
 
-2. Run `paper-writer` — implements all changes in priority order:
+2. Run `write` — implements all changes in priority order:
    a. Structural changes first (section reorders, merges)
    b. Content changes (rewrites, additions, removals)
    c. Local fixes (terms, citations, captions)
@@ -20,4 +20,4 @@ Invokes `paper-writer` with the AUTHOR action list and any experiment results.
 ## Do Not Run Humanizer Here
 
 Humanizer runs in Phase 6, after all edits are complete.
-paper-writer should flag sections for humanizer but not run it mid-edit.
+write should flag sections for humanizer but not run it mid-edit.

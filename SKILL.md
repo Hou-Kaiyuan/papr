@@ -18,14 +18,14 @@ When invoked as `/papr <subcommand> [args]`, read the corresponding file and fol
 |---|---|---|
 | `pipeline` | `research-pipeline/SKILL.md` | `/papr pipeline start` |
 | `panel` | `discussion-panel/SKILL.md` | `/papr panel` |
-| `inspect` | `paper-quality-inspect.md` | `/papr inspect` |
-| `storyline` | `paper-storyline.md` | `/papr storyline` |
-| `write` | `paper-writer.md` | `/papr write` |
-| `humanize` | `humanizer.md` | `/papr humanize all` |
-| `scout` | `related-work-scout.md` | `/papr scout` |
-| `experiments` | `experiment-designer.md` | `/papr experiments` |
-| `code-inspect` | `code-inspector.md` | `/papr code-inspect` |
-| `external-review` | `external-reviewer.md` | `/papr external-review` |
+| `inspect` | `inspect.md` | `/papr inspect` |
+| `storyline` | `storyline.md` | `/papr storyline` |
+| `write` | `write.md` | `/papr write` |
+| `humanize` | `humanize.md` | `/papr humanize all` |
+| `scout` | `scout.md` | `/papr scout` |
+| `experiments` | `experiments.md` | `/papr experiments` |
+| `code-inspect` | `code-inspect.md` | `/papr code-inspect` |
+| `external-review` | `external-review.md` | `/papr external-review` |
 
 Pass any additional arguments (e.g. `start`, `score`, `all`, `focus <topic>`) directly to the loaded file as its subcommand input.
 
@@ -86,14 +86,14 @@ File: `agent-protocol.md`
 papr/
 ├── SKILL.md                         ← you are here
 ├── agent-protocol.md                ← shared message bus protocol
-├── paper-quality-inspect.md
-├── paper-storyline.md
-├── experiment-designer.md
-├── code-inspector.md
-├── external-reviewer.md
-├── paper-writer.md
-├── related-work-scout.md
-├── humanizer.md
+├── inspect.md
+├── storyline.md
+├── experiments.md
+├── code-inspect.md
+├── external-review.md
+├── write.md
+├── scout.md
+├── humanize.md
 ├── discussion-panel/
 │   ├── SKILL.md                     ← panel router + turn sequence
 │   └── roles/

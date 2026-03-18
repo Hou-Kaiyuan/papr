@@ -74,7 +74,7 @@ AUTHOR posts this at the end of their turn:
 - [ ] [specific change] — from [ROLE] TURN [T]
 
 ### Will fix — requires new experiment
-- [ ] [description] → pass to experiment-designer
+- [ ] [description] → pass to experiments
 
 ### Will clarify in text (not a real weakness)
 - [ ] [description + why]
@@ -114,5 +114,5 @@ After ADVISOR's closing turn:
 | Condition | Action |
 |---|---|
 | `SIGNAL: ESCALATE` | Surface to human in round summary before continuing |
-| Experiment items in action list | Pass to `experiment-designer` |
-| Text-only items | Pass to `paper-writer` |
+| Experiment items in action list | Pass to `experiments` |
+| Text-only items | Pass to `write` |

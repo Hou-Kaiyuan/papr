@@ -30,7 +30,7 @@ Apply in this sequence to avoid line-number conflicts:
 
 ## Special Cases
 
-**Undefined terms or assumptions:** Add the definition at the first point of use in the main text. If justification needs a citation, use web search. If it needs an experiment, flag to `experiment-designer` instead.
+**Undefined terms or assumptions:** Add the definition at the first point of use in the main text. If justification needs a citation, use web search. If it needs an experiment, flag to `experiments` instead.
 
 **Rebuttal-period text:** Any text containing "as a reviewer noted", "in response to review concerns", or similar — delete and rewrite as if the insight was always in the paper.
 

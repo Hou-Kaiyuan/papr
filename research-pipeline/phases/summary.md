@@ -7,7 +7,7 @@ Writes the round summary to `ROUND_STATE.md` and presents it to the human.
 1. Collect from this round:
    - Internal panel average score (from `DISCUSSION_THREAD.md`)
    - External reviewer score (from Phase 7, if available)
-   - All changes logged by `paper-writer`
+   - All changes logged by `write`
    - Open issues not yet resolved
    - AUTHOR action items carried forward
 
@@ -28,7 +28,7 @@ Writes the round summary to `ROUND_STATE.md` and presents it to the human.
 
 ### What changed this round
 **Text changes:**
-- [list from paper-writer log]
+- [list from write log]
 
 **New experiments:**
 - [list]

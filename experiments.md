@@ -4,7 +4,7 @@
 Takes reviewer feedback, weak claims, or action list items marked "requires new experiment"
 and produces a concrete, prioritized plan ready to hand to an implementer.
 
-**After producing the plan, pass it to `code-inspector` before running anything.**
+**After producing the plan, pass it to `code-inspect` before running anything.**
 
 
 ## Step 1: Check Before Designing
@@ -46,7 +46,7 @@ Implementation notes:
   [Key parameters, pretrained checkpoints, libraries]
   Estimated compute: ~[N] GPU-hours
 
-Potential evaluation pitfalls to check (for code-inspector):
+Potential evaluation pitfalls to check (for code-inspect):
   [Any ways this evaluation could be gamed or misleading]
 ```
 
@@ -70,5 +70,5 @@ Explicitly list which experiments can run simultaneously so the implementer can 
 ### Can run in parallel: [list]
 ### Total estimated compute: ~[N] GPU-hours
 
-### Next step: pass to code-inspector before implementation
+### Next step: pass to code-inspect before implementation
 ```
