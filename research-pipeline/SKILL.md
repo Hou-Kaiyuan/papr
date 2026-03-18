@@ -51,7 +51,8 @@ Do exactly these steps. Do NOT read any other files. Do NOT run `ls` or `head` o
 
 1. If `paper_dir` was provided, use it. Otherwise ask: "Which folder is your LaTeX project?"
 2. Find the main .tex file: Glob for `[paper_dir]/*.tex` (NOT recursive). Pick the one named `main.tex` (or the first result if no main.tex).
-3. Create `ROUND_STATE.md` in `paper_dir`:
+3. If `[paper_dir]/ROUND_STATE.md` or `[paper_dir]/DISCUSSION_THREAD.md` already exist, read them first (required before overwriting).
+4. Write `[paper_dir]/ROUND_STATE.md`:
 
 ```markdown
 # Research Pipeline State
@@ -63,8 +64,8 @@ Do exactly these steps. Do NOT read any other files. Do NOT run `ls` or `head` o
 ## Score history: []
 ```
 
-4. Create empty `DISCUSSION_THREAD.md` in `paper_dir`
-5. Proceed immediately to Round 1 — read `phases/scout.md` and execute it
+5. Write `[paper_dir]/DISCUSSION_THREAD.md` with empty content.
+6. Proceed immediately to Round 1 — read `phases/scout.md` and execute it.
 
 ---
 
