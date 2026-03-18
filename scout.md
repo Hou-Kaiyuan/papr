@@ -5,6 +5,17 @@ Autonomously searches for related papers, current SOTA methods, and missing cita
 Uses web search throughout. Produces a structured report with routed action items.
 
 
+## Step 1: Extract Paper Context
+
+Before searching, extract from the paper:
+- Core task and problem domain
+- Method family (e.g. contrastive learning, diffusion, transformer-based)
+- Evaluation benchmarks and datasets used
+- Claimed contributions (verbatim from intro)
+- Key baselines already compared against
+- Year range of cited work (to identify gaps in recent coverage)
+
+
 ## Step 2: Search Protocol
 
 ### A. Current State of the Art
@@ -35,20 +46,34 @@ For each key citation in the paper:
 ```
 Goal: Find papers that could undermine novelty claims. Better to find them now than in review.
 
+
+## Step 3: Output Format
+
+```
+## Scout Report
+### Paper: [filename]
+### Date: [date]
+
 ### A. Strong baselines we are missing
 | Method | Venue / Year | Performance on [benchmark] | URL |
 |---|---|---|---|
+| [method] | [venue year] | [metric value] | [url] |
 
 ### B. Missing citations
-- [Title] — relevant because [one-line reason] — [URL]
+- [Title] -- relevant because [one-line reason] -- [URL]
 
 ### C. Citation issues
 - [Cited paper]: we attribute "[X]" but paper actually says "[Y]"
+- [Cited paper]: newer version available ([old year] -> [new year, URL])
 
 ### D. Novelty concerns
-- [Paper]: similar because [description]. Our difference from it: [TBD]
+- [Paper]: similar because [description]. Our difference: [specific distinction]
 
 ### E. Suggested additions to related work
-[2–3 bullets ready to integrate as text]
-```
+- [2-3 sentences ready to integrate as text, with citations]
 
+### Routing
+- Baselines to add as experiments: [list] -> pass to experiments
+- Text changes (citations, related work): [list] -> pass to write
+- Novelty threats to discuss in panel: [list] -> pass to discussion-panel
+```
