@@ -24,15 +24,15 @@ Run after papr-write, on the final version.
 ## Prerequisites
 
 Requires Codex MCP. If unavailable:
-> Write to `.claude/latest/ROUND_STATE.md`: "External review skipped -- Codex MCP not connected."
+> Write to `.claude/latest-run/latest/ROUND_STATE.md`: "External review skipped -- Codex MCP not connected."
 > Done. Return.
 
 ## On invocation
 
-1. Read `.claude/latest/ROUND_STATE.md` for internal panel scores.
+1. Read `.claude/latest-run/latest/ROUND_STATE.md` for internal panel scores.
 2. Read the paper's .tex files. Strip author info (\author{} commands).
 3. Send to Codex MCP with the review prompt below.
-4. Append review to `.claude/latest/ROUND_STATE.md`.
+4. Append review to `.claude/latest-run/latest/ROUND_STATE.md`.
 5. Compare with internal panel.
 
 ## Strict Isolation
@@ -79,7 +79,7 @@ Structure your review as:
 
 ## After Receiving Review
 
-Append to `.claude/latest/ROUND_STATE.md`:
+Append to `.claude/latest-run/latest/ROUND_STATE.md`:
 
 ```
 ## External Review
@@ -98,4 +98,4 @@ Internal-only (not flagged externally):
 - [issue]
 ```
 
-If external reviewer raises a BLOCKER-level finding, note `SIGNAL: ESCALATE` in `.claude/latest/ROUND_STATE.md`.
+If external reviewer raises a BLOCKER-level finding, note `SIGNAL: ESCALATE` in `.claude/latest-run/latest/ROUND_STATE.md`.

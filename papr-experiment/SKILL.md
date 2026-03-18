@@ -25,7 +25,7 @@ and verifies correctness before execution.
 
 ## On invocation
 
-1. Read `.claude/latest/ROUND_STATE.md` for the action list.
+1. Read `.claude/latest-run/latest/ROUND_STATE.md` for the action list.
 2. Extract items marked "requires new experiment".
 3. If none: output "No experiments needed." and return.
 4. For each item, run through the steps below.
@@ -101,7 +101,7 @@ List which experiments can run simultaneously for GPU scheduling.
 
 ## Output
 
-Write to `.claude/latest/ROUND_STATE.md`:
+Write to `.claude/latest-run/latest/ROUND_STATE.md`:
 ```
 ## Experiment Plan
 ### Execution order:

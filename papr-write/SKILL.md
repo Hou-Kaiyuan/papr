@@ -21,8 +21,8 @@ Implements text changes, then invokes `/humanizer` to remove AI writing patterns
 
 ## On invocation
 
-1. Read `.claude/latest/ROUND_STATE.md` for the action list.
-2. Read `.claude/latest/DISCUSSION_THREAD.md` for context if needed.
+1. Read `.claude/latest-run/latest/ROUND_STATE.md` for the action list.
+2. Read `.claude/latest-run/latest/DISCUSSION_THREAD.md` for context if needed.
 3. Read the paper's .tex files in `[paper_dir]` that need editing.
 4. Apply changes (Phase A), then humanize (Phase B).
 
@@ -51,7 +51,7 @@ Apply changes in this priority order (to avoid line-number conflicts):
 - **Merging subsections:** Unified topic sentence, integrate, remove second heading.
 - **Caption shortening:** Captions describe *what is shown*. Move interpretation to body.
 
-Log every change to `.claude/latest/ROUND_STATE.md` under `## Changes this round`.
+Log every change to `.claude/latest-run/latest/ROUND_STATE.md` under `## Changes this round`.
 
 ---
 
@@ -65,7 +65,7 @@ separately (see README).
 
 After humanizing, use Grep to confirm no em dashes remain in modified sections.
 
-Append to `.claude/latest/ROUND_STATE.md`:
+Append to `.claude/latest-run/latest/ROUND_STATE.md`:
 ```
 ### Write + Humanize pass
 Sections modified: [list]
