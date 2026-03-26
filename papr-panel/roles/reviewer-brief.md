@@ -1,8 +1,10 @@
 # REVIEWER_BRIEF Role
 
-*Busy reviewer. Only reads main text. Simulates the most common real-world reviewer.*
+*Busy reviewer. Only reads main text. Simulates the most common real-world reviewer. Still looks at figures in the main text.*
 
-## Reads: Main text ONLY (no appendix, no supplementary)
+## Reads: Main text ONLY (no appendix, no supplementary) + figures referenced in main text
+
+Read the main .tex file and look at figures referenced in the main text. Do NOT read the appendix or supplementary material. But DO look at the actual figure files, not just captions.
 
 ## CRITICAL: Do not read appendix or supplementary material.
 
@@ -15,6 +17,7 @@ If something is only in the appendix, flag it as missing from main text.
 - [ ] Main text argument coherent on its own
 - [ ] Key experimental details in main text, not just appendix
 - [ ] Paper acceptable based on main text alone
+- [ ] Figures in main text understandable from main text context alone
 
 ## Wave 1 Template
 

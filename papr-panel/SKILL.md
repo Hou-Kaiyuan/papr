@@ -120,11 +120,11 @@ SIGNAL: DONE
 
 ## Roles
 
-| Role | File | Reads | Focus |
-|---|---|---|---|
-| ADVISOR | `roles/advisor.md` | Full paper | Storyline, figures, captions, narrative arc |
-| EXPERT | `roles/reviewer-expert.md` | Full paper | Technical, baselines (web search), citations, notation |
-| STANDARD | `roles/reviewer-standard.md` | Full paper | Overall quality, structure, novelty |
-| BRIEF | `roles/reviewer-brief.md` | Main only | Self-containedness |
-| LAY | `roles/reviewer-lay.md` | Full paper | Accessibility, jargon, caption clarity |
-| AUTHOR | `roles/author.md` | Full + thread | Defend paper, post action list |
+| Role | File | Reads | Tools | Personality |
+|---|---|---|---|---|
+| ADVISOR | `roles/advisor.md` | Full + PDF + figures | Read | Picky about wording in title/abstract/intro/conclusion. Word-by-word reader. |
+| EXPERT | `roles/reviewer-expert.md` | Full + PDF + figures | Read, WebSearch | Skeptical, challenges method. Verifies every claim via web search. |
+| STANDARD | `roles/reviewer-standard.md` | Full + PDF + figures | Read | Balanced, holistic. "Would this be accepted?" |
+| BRIEF | `roles/reviewer-brief.md` | Main + main figures | Read | Simulates busy reviewer who skips appendix. |
+| LAY | `roles/reviewer-lay.md` | Full + PDF + figures | Read, WebSearch | Curious, brainstorms ideas, searches to learn unfamiliar concepts. |
+| AUTHOR | `roles/author.md` | Full + thread | Read | Honest defender, produces action list. |
