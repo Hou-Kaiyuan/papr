@@ -1,6 +1,6 @@
 # PAPR -- Paper Autonomous Pipeline Review
 
-5 Claude Code skills for autonomous academic paper improvement. Each skill runs independently with its own context.
+5 Claude Code skills for autonomous academic paper improvement. Multi-agent review panels, iterative refinement, AI writing removal, and external blind review.
 
 ## Install
 
@@ -13,7 +13,7 @@ cp -r /tmp/papr/papr-* ~/.claude/skills/
 git clone https://github.com/blader/humanizer.git ~/.claude/skills/humanizer
 ```
 
-### Codex MCP (optional, for external review)
+### Optional: Codex MCP (for external review)
 
 ```bash
 npm install -g @openai/codex
@@ -21,137 +21,32 @@ codex setup
 claude mcp add codex -s user -- codex mcp-server
 ```
 
-## Usage
+### Optional: Agent Teams (for live panel cross-talk)
 
-### Full pipeline (the main workflow)
-
-```bash
-# Run 3 rounds of autonomous improvement on a LaTeX project
-/papr-pipeline 3 path/to/latex-project
-
-# Run 2 rounds
-/papr-pipeline 2 path/to/latex-project
-
-# Default (3 rounds, will ask for paper path)
-/papr-pipeline
-```
-
-### Review panel only
+By default, panel agents communicate via 2-wave file exchange. For live real-time
+discussion between agents, enable the experimental Agent Teams feature:
 
 ```bash
-# Run the 6-agent parallel review panel
-/papr-panel path/to/latex-project
+# Option 1: Environment variable
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 
-# Scores only, no discussion
-/papr-panel path/to/latex-project score
-
-# Focus the panel on a specific topic
-/papr-panel path/to/latex-project focus "related work"
+# Option 2: Claude Code settings (persistent)
+# Add to ~/.claude/settings.json:
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}
 ```
 
-### Write + humanize
+Requires Claude Code v2.1.32+. When enabled, panel agents use `SendMessage` for
+direct peer-to-peer communication instead of wave files.
 
-```bash
-# Implement text changes from the panel's action list, then remove AI writing patterns
-/papr-write path/to/latex-project
-```
-
-### External review
-
-```bash
-# Send paper for blind review via Codex MCP (requires Codex MCP setup)
-/papr-review path/to/latex-project
-```
-
-### Experiment design
-
-```bash
-# Design and verify experiments from reviewer feedback
-/papr-experiment path/to/latex-project
-```
-
-## How the Pipeline Works
-
-```
-/papr-pipeline chains these per round:
-
-  /papr-panel        6 agents review in parallel, produce score + action list
-       |
-  /papr-experiment   design experiments if needed (conditional)
-       |
-  /papr-write        implement text changes, then /humanizer on modified sections
-       |
-  /papr-review       blind external review via Codex MCP
-
-  -> score, summary, ask user to continue
-```
-
-Each skill is invoked as a separate skill call with its own fresh context. Pipeline stops early at score 9+/10.
-
-## Output
-
-All generated files are saved in the working directory under `.claude/`:
-
-```
-.claude/
-├── 03-18-16-round-1/
-│   ├── ROUND_STATE.md
-│   └── DISCUSSION_THREAD.md
-├── 03-18-17-round-2/
-│   └── ...
-└── latest -> 03-18-17-round-2/
-```
-
-Paper source files are never polluted with pipeline artifacts.
-
-## Panel Agents
-
-| Agent | Reads | Built-in Checklists |
-|---|---|---|
-| Advisor | Full paper + PDF + figures | Storyline arc, figure/table visual quality, captions |
-| Expert | Full paper | Technical correctness, baselines (web search), citations, notation |
-| Standard | Full paper | Overall quality, structure, novelty assessment |
-| Brief | Main text only | Self-containedness without appendix |
-| Lay | Full paper + PDF + figures | Accessibility, jargon, figure/caption clarity |
-| Author | Full + thread | Defends paper, produces action list |
-
-## File Structure
-
-```
-papr/
-├── README.md
-├── papr-pipeline/
-│   └── SKILL.md
-├── papr-panel/
-│   ├── SKILL.md
-│   └── roles/
-│       ├── advisor.md
-│       ├── reviewer-expert.md
-│       ├── reviewer-standard.md
-│       ├── reviewer-brief.md
-│       ├── reviewer-lay.md
-│       └── author.md
-├── papr-write/
-│   └── SKILL.md                # text changes, then invokes /humanizer
-├── papr-review/
-│   └── SKILL.md                # external blind review via Codex MCP
-└── papr-experiment/
-    └── SKILL.md                # experiment design + code verification
-```
-
-## Requirements
-
-- [Claude Code](https://claude.ai/code)
-- [humanizer](https://github.com/blader/humanizer) skill (required by papr-write)
-- LaTeX distribution + latexmk (required by papr-write for PDF compilation)
-- [Codex CLI](https://github.com/openai/codex) + MCP server (optional, for /papr-review)
-
-### LaTeX Setup
+### LaTeX (required by papr-write)
 
 ```bash
 # macOS
-brew install --cask mactex    # or: brew install basictex
-brew install poppler          # provides pdfinfo
+brew install --cask mactex && brew install poppler
 
 # Ubuntu/Debian
 sudo apt install texlive-full latexmk poppler-utils
@@ -159,3 +54,151 @@ sudo apt install texlive-full latexmk poppler-utils
 # Verify
 latexmk --version && pdfinfo -v
 ```
+
+## Usage
+
+### Full pipeline
+
+```bash
+/papr-pipeline 3 path/to/latex-project      # 3 rounds
+/papr-pipeline 2 path/to/latex-project      # 2 rounds
+/papr-pipeline                               # asks for rounds + path
+```
+
+### Review panel only
+
+```bash
+/papr-panel path/to/latex-project            # full review
+/papr-panel path/to/latex-project score      # scores only
+/papr-panel path/to/latex-project focus "related work"
+```
+
+### Write + humanize + compile
+
+```bash
+/papr-write path/to/latex-project
+```
+
+### External review
+
+```bash
+/papr-review path/to/latex-project
+```
+
+### Experiment design
+
+```bash
+/papr-experiment path/to/latex-project
+```
+
+## How the Pipeline Works
+
+```
+/papr-pipeline chains per round (fully autonomous):
+
+  /papr-panel        6 agents review in parallel -> score + action list
+       |
+  /papr-experiment   design + verify + run experiments (if needed)
+       |
+  /papr-write        edit text -> /humanizer -> compile PDF
+       |
+  /papr-review       blind external review via Codex MCP
+
+  -> both scores recorded, next round starts automatically
+  -> stops early at 9+/10
+```
+
+## Panel Modes
+
+### Wave Mode (default)
+
+Two rounds of parallel execution. All agents write independently (Wave 1),
+results are merged, then all agents respond to each other (Wave 2).
+
+```
+Wave 1: All 6 agents review independently (parallel)
+           |
+        merge into DISCUSSION_THREAD.md
+           |
+Wave 2: All 6 agents respond to each other (parallel)
+           |
+        merge -> scores + action list
+```
+
+### Agent Teams Mode (experimental)
+
+When `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, agents communicate in real time
+via direct messaging. More natural discussion flow.
+
+```
+advisor <-> expert <-> standard
+   ^                      |
+   |    Live SendMessage   v
+  lay  <->  author  <->  brief
+```
+
+Agents challenge, respond, and converge organically. The lead collects
+final reviews when discussion settles.
+
+## Panel Agents
+
+| Agent | Reads | Personality |
+|---|---|---|
+| Advisor | Full + PDF + figures | Picky wordsmith. Reads title/abstract/intro/conclusion word-by-word. |
+| Expert | Full + PDF + figures | Skeptical challenger. Web-searches every claim and baseline. |
+| Standard | Full + PDF + figures | Balanced gatekeeper. "Would this be accepted at a top venue?" |
+| Brief | Main text only | Busy reviewer. Skips appendix. Flags missing main-text content. |
+| Lay | Full + PDF + figures | Curious explorer. Searches to learn, brainstorms cross-domain ideas. |
+| Author | Full + thread | Honest defender. Depth over breadth. Produces structured action list. |
+
+## Output
+
+All generated files saved under `.claude/` in the working directory:
+
+```
+.claude/
+├── papr-03-18-16/
+│   ├── round-1/
+│   │   ├── ROUND_STATE.md       # scores, action list, changes
+│   │   └── DISCUSSION_THREAD.md # full panel discussion
+│   ├── round-2/
+│   │   └── ...
+│   └── latest -> round-2/
+└── latest-run -> papr-03-18-16/
+```
+
+Paper source files are never polluted with pipeline artifacts.
+
+## File Structure
+
+```
+papr/
+├── README.md
+├── papr-pipeline/
+│   └── SKILL.md                     # orchestrator
+├── papr-panel/
+│   ├── SKILL.md                     # panel coordinator (wave + teams modes)
+│   └── roles/
+│       ├── advisor.md               # storyline + figures + word choice
+│       ├── reviewer-expert.md       # technical + baselines + citations
+│       ├── reviewer-standard.md     # quality + structure + novelty
+│       ├── reviewer-brief.md        # main-text self-containedness
+│       ├── reviewer-lay.md          # accessibility + curiosity + ideas
+│       └── author.md               # defense + action list
+├── papr-write/
+│   └── SKILL.md                     # edit + /humanizer + compile PDF
+├── papr-review/
+│   └── SKILL.md                     # external blind review via Codex MCP
+└── papr-experiment/
+    └── SKILL.md                     # design + TDD + monitor + figures
+```
+
+## Requirements
+
+| Dependency | Required by | Required? |
+|---|---|---|
+| [Claude Code](https://claude.ai/code) | all | yes |
+| [humanizer](https://github.com/blader/humanizer) skill | papr-write | yes |
+| LaTeX + latexmk + poppler | papr-write | yes |
+| [Codex CLI](https://github.com/openai/codex) + MCP | papr-review | optional |
+| Agent Teams (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) | papr-panel | optional |
