@@ -5,6 +5,7 @@ description: |
   my paper", "run panel", "get feedback", or wants multi-perspective critique.
   Agents: Advisor (storyline), Expert (technical+baselines), Standard (quality),
   Brief (main-text only), Lay (accessibility), Author (defense+action list).
+  Supports Agent Teams for live cross-talk when enabled.
 argument-hint: "[paper_dir]"
 allowed-tools:
   - Read
@@ -20,17 +21,90 @@ allowed-tools:
 
 # Multi-Agent Paper Review Panel
 
-Two waves, all agents in parallel. Each agent writes to its own temp file (no race conditions).
-
 **Scoring rule:** Each round scored INDEPENDENTLY. Do NOT show agents previous scores.
 
 ## On invocation
 
 1. Read `.claude/latest-run/latest/ROUND_STATE.md` (ignore error if missing). Do NOT pass previous scores to agents.
 2. Write fresh empty `.claude/latest-run/latest/DISCUSSION_THREAD.md`.
-3. Start Wave 1.
+3. Check mode: run `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`
+   - If `1`: use **Agent Teams mode** (live cross-talk)
+   - Otherwise: use **Wave mode** (2-wave subagents)
 
-## Wave 1: Independent Reviews
+---
+
+## Agent Teams Mode (live cross-talk)
+
+When `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, agents run as teammates with direct messaging.
+
+### Setup
+
+```bash
+# Check if enabled
+if [ "$CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" = "1" ]; then echo "TEAMS"; else echo "WAVES"; fi
+```
+
+### 1. Spawn all 6 teammates
+
+```
+Agent(team_name: "papr-panel", name: "advisor",  prompt: [advisor role + paper])
+Agent(team_name: "papr-panel", name: "expert",   prompt: [expert role + paper])
+Agent(team_name: "papr-panel", name: "standard", prompt: [standard role + paper])
+Agent(team_name: "papr-panel", name: "brief",    prompt: [brief role + paper])
+Agent(team_name: "papr-panel", name: "lay",      prompt: [lay role + paper])
+Agent(team_name: "papr-panel", name: "author",   prompt: [author role + paper])
+```
+
+### 2. Teammate instructions
+
+Each teammate's prompt includes:
+
+```
+You are [ROLE] in a live paper review panel (Agent Teams mode).
+
+[paste roles/[role].md]
+
+Paper location: [paper_dir]
+- Read .tex files, main.pdf, and figures/ directory
+- You MUST look at actual figures
+
+You can directly message other panelists using SendMessage:
+  SendMessage(target_name: "expert", content: "Your response to their point")
+  SendMessage(type: "broadcast", content: "Message to all panelists")
+
+## Workflow
+1. Read the paper and post your initial review (broadcast to all)
+2. Read others' reviews as they arrive and respond directly
+3. Challenge points you disagree with, acknowledge good points
+4. When discussion converges, post your final score
+
+## Rules
+- Score independently. Do NOT reference previous rounds.
+- Address other reviewers by name when responding
+- Keep exchanges focused and specific
+- AUTHOR: post your final action list when discussion winds down
+- ADVISOR: post synthesis + final scores when all reviews are in
+
+Write your final review to .claude/latest-run/latest/[role]_review.md
+```
+
+### 3. Lead monitors and collects
+
+The lead (this agent) monitors the team:
+- Wait for all teammates to post final reviews
+- If discussion stalls, broadcast: "Please post final scores."
+- Collect all `[role]_review.md` files
+- Merge into `DISCUSSION_THREAD.md`
+- Write panel summary to `ROUND_STATE.md`
+- Clean up: delete team
+
+---
+
+## Wave Mode (2-wave subagents, default)
+
+When Agent Teams is not enabled, use file-based coordination with 2 waves.
+
+### Wave 1: Independent Reviews
 
 Spawn ALL 6 agents with `run_in_background: true`:
 
@@ -45,11 +119,11 @@ Spawn ALL 6 agents with `run_in_background: true`:
 
 All files in `.claude/latest-run/latest/`. Wait for all. Merge into `DISCUSSION_THREAD.md`. Delete temp files.
 
-## Wave 2: Cross-Discussion
+### Wave 2: Cross-Discussion
 
 Same agents, same pattern with `wave2_*.md`. Each reads full `DISCUSSION_THREAD.md` first. AUTHOR posts action list. ADVISOR synthesizes. Merge and delete.
 
-## Agent Prompt
+### Agent Prompt (Wave Mode)
 
 ```
 You are [ROLE] reviewing an academic paper.
@@ -72,16 +146,19 @@ Output to: .claude/latest-run/latest/wave[N]_[role].md
 Format: FROM: [ROLE] / WAVE: [N] / [review] / SIGNAL: DONE
 ```
 
-## After Wave 2
+---
+
+## After Panel (both modes)
 
 Write to `.claude/latest-run/latest/ROUND_STATE.md`:
 ```
 ## Panel Summary
+### Mode: [Agent Teams | Wave]
 ### Score: [avg]/10 (Advisor: X | Expert: Y | Standard: Z | Brief: B | Lay: W)
 ### Key issues
 - [bullet]
 ### Author action list
-[from AUTHOR wave 2]
+[from AUTHOR]
 ```
 
 ## Roles
