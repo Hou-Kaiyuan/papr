@@ -1,10 +1,11 @@
 ---
 name: papr-panel
 description: |
-  Multi-agent paper review panel. 6 agents (Advisor, Expert, Standard, Brief,
-  Lay, Author) review a paper in parallel via 2 waves. Each role has built-in
-  audit checklists (format, storyline, baselines, accessibility). Produces
-  scores and an action list. Invoke as /papr-panel [paper_dir].
+  Run a 6-agent parallel paper review panel. Use when the user says "review
+  my paper", "run panel", "get feedback", or wants multi-perspective critique.
+  Agents: Advisor (storyline), Expert (technical+baselines), Standard (quality),
+  Brief (main-text only), Lay (accessibility), Author (defense+action list).
+argument-hint: "[paper_dir]"
 allowed-tools:
   - Read
   - Write
@@ -19,112 +20,77 @@ allowed-tools:
 
 # Multi-Agent Paper Review Panel
 
-6 agents review the paper in parallel. Two waves: independent reviews, then cross-discussion.
-Each agent writes to its own temp file to avoid race conditions.
+Two waves, all agents in parallel. Each agent writes to its own temp file (no race conditions).
 
-## Scoring Rule
-
-Each round is scored INDEPENDENTLY. Agents must evaluate the paper as-is,
-as if seeing it for the first time. Do NOT show agents previous round scores.
-Do NOT include score history in agent prompts. This prevents score inflation
-from agents seeing "we improved from X to Y."
+**Scoring rule:** Each round scored INDEPENDENTLY. Do NOT show agents previous scores.
 
 ## On invocation
 
-IMPORTANT: Do NOT explore the filesystem. Do NOT run `ls` or `bash test`. Do NOT read all .tex files upfront. The agents will read the paper themselves.
+1. Read `.claude/latest-run/latest/ROUND_STATE.md` (ignore error if missing). Do NOT pass previous scores to agents.
+2. Write fresh empty `.claude/latest-run/latest/DISCUSSION_THREAD.md`.
+3. Start Wave 1.
 
-1. Read `.claude/latest-run/latest/ROUND_STATE.md` (ignore error if not found). Note the action list if present, but do NOT pass previous scores to agents.
-2. Write a fresh `.claude/latest-run/latest/DISCUSSION_THREAD.md` (empty). Each round gets a clean discussion.
-3. Immediately start Wave 1 below.
+## Wave 1: Independent Reviews
 
-## Wave 1: Independent Reviews (all in parallel)
+Spawn ALL 6 agents with `run_in_background: true`:
 
-Spawn ALL 6 agents using Agent tool with `run_in_background: true`.
-Each agent writes to its own temp file in `.claude/latest-run/latest/`:
+| Agent | Output file | Task |
+|---|---|---|
+| ADVISOR | `wave1_advisor.md` | Storyline + figures + word choice |
+| EXPERT | `wave1_expert.md` | Technical + baselines (web search) |
+| STANDARD | `wave1_standard.md` | Quality + structure |
+| BRIEF | `wave1_brief.md` | Main-text self-containedness |
+| LAY | `wave1_lay.md` | Accessibility + ideas (web search) |
+| AUTHOR | `wave1_author.md` | Preemptive defense |
 
-```
-Agent(ADVISOR)           -> wave1_advisor.md
-Agent(REVIEWER_EXPERT)   -> wave1_expert.md
-Agent(REVIEWER_STANDARD) -> wave1_standard.md
-Agent(REVIEWER_BRIEF)    -> wave1_brief.md
-Agent(REVIEWER_LAY)      -> wave1_lay.md
-Agent(AUTHOR)            -> wave1_author.md
-```
+All files in `.claude/latest-run/latest/`. Wait for all. Merge into `DISCUSSION_THREAD.md`. Delete temp files.
 
-Wait for all to complete. Merge all `wave1_*.md` into `DISCUSSION_THREAD.md`. Delete temp files.
+## Wave 2: Cross-Discussion
 
-## Wave 2: Cross-Discussion (all in parallel)
+Same agents, same pattern with `wave2_*.md`. Each reads full `DISCUSSION_THREAD.md` first. AUTHOR posts action list. ADVISOR synthesizes. Merge and delete.
 
-Spawn ALL 6 agents again. Each reads `DISCUSSION_THREAD.md` and writes to:
-
-```
-Agent(ADVISOR)           -> wave2_advisor.md     (synthesize + scores)
-Agent(REVIEWER_EXPERT)   -> wave2_expert.md      (challenge defenses)
-Agent(REVIEWER_STANDARD) -> wave2_standard.md    (cross-cutting issues)
-Agent(REVIEWER_BRIEF)    -> wave2_brief.md       (main-text gaps)
-Agent(REVIEWER_LAY)      -> wave2_lay.md         (clarity responses)
-Agent(AUTHOR)            -> wave2_author.md      (respond + action list)
-```
-
-Wait for all. Merge into `DISCUSSION_THREAD.md`. Delete temp files.
-
-## Agent Prompt Template
+## Agent Prompt
 
 ```
-You are [ROLE] in an academic paper review panel.
+You are [ROLE] reviewing an academic paper.
 
-## Your Role
-[paste from roles/[role].md]
+[paste roles/[role].md]
 
-## Paper
-Read the paper's .tex files from [paper_dir]. [scope based on role]
-Also read the compiled PDF: [paper_dir]/main.pdf (for visual layout, figures, tables).
-Also read individual figure files from [paper_dir]/figures/ (PNG/JPG/PDF images).
-You MUST look at the actual figures to evaluate visual quality, not just the LaTeX code.
+Paper location: [paper_dir]
+- Read .tex source files for text
+- Read main.pdf for visual layout
+- Read figures/ directory for individual figure inspection
+You MUST look at actual figures, not just LaTeX code.
 
-## Discussion So Far
-[DISCUSSION_THREAD.md content, or "Empty" for Wave 1]
+Discussion: [DISCUSSION_THREAD.md content, or "Empty" for Wave 1]
 
-## IMPORTANT
-Score the paper independently based on its current state.
-Do NOT reference any previous round scores or prior discussions.
-Evaluate as if this is a fresh submission.
+Score independently. Do NOT reference previous rounds. Evaluate as a fresh submission.
 
-## Task (Wave [1|2])
-Wave 1: Write your initial review including all checklists from your role.
-Wave 2: Read others' comments and respond. Address points by name.
+Wave [1|2]: [Wave 1: initial review with checklists | Wave 2: respond to others by name]
 
-## Output
-Write to .claude/latest-run/latest/wave[N]_[role].md using format:
----
-FROM: [ROLE]
-WAVE: [1|2]
----
-[review]
-SIGNAL: DONE
+Output to: .claude/latest-run/latest/wave[N]_[role].md
+Format: FROM: [ROLE] / WAVE: [N] / [review] / SIGNAL: DONE
 ```
 
 ## After Wave 2
 
-1. Extract scores from each reviewer
-2. Compute average score
-3. Write to `.claude/latest-run/latest/ROUND_STATE.md`:
+Write to `.claude/latest-run/latest/ROUND_STATE.md`:
 ```
 ## Panel Summary
 ### Score: [avg]/10 (Advisor: X | Expert: Y | Standard: Z | Brief: B | Lay: W)
 ### Key issues
 - [bullet]
 ### Author action list
-[paste from AUTHOR wave 2]
+[from AUTHOR wave 2]
 ```
 
 ## Roles
 
-| Role | File | Reads | Tools | Personality |
-|---|---|---|---|---|
-| ADVISOR | `roles/advisor.md` | Full + PDF + figures | Read | Picky about wording in title/abstract/intro/conclusion. Word-by-word reader. |
-| EXPERT | `roles/reviewer-expert.md` | Full + PDF + figures | Read, WebSearch | Skeptical, challenges method. Verifies every claim via web search. |
-| STANDARD | `roles/reviewer-standard.md` | Full + PDF + figures | Read | Balanced, holistic. "Would this be accepted?" |
-| BRIEF | `roles/reviewer-brief.md` | Main + main figures | Read | Simulates busy reviewer who skips appendix. |
-| LAY | `roles/reviewer-lay.md` | Full + PDF + figures | Read, WebSearch | Curious, brainstorms ideas, searches to learn unfamiliar concepts. |
-| AUTHOR | `roles/author.md` | Full + thread | Read | Honest defender, produces action list. |
+| Role | Reads | Personality |
+|---|---|---|
+| ADVISOR | Full + PDF + figures | Picky wordsmith. Title/abstract/intro/conclusion word-by-word. |
+| EXPERT | Full + PDF + figures | Skeptical challenger. Web-searches every claim. |
+| STANDARD | Full + PDF + figures | Balanced gatekeeper. "Would this be accepted?" |
+| BRIEF | Main text + main figures | Busy reviewer. Skips appendix. |
+| LAY | Full + PDF + figures | Curious explorer. Searches to learn, brainstorms ideas. |
+| AUTHOR | Full + thread | Honest defender. Depth over breadth in action list. |
