@@ -95,7 +95,47 @@ Compute: ~[N] GPU-hours
 | Metric saturates on easy examples | |
 | Data contamination (test seen in training) | |
 
-## Step 4: Parallelism
+## Step 4: Test Before Running (TDD)
+
+Before running any experiment (especially time-consuming ones):
+
+1. **Write a simple test case first.** Create a minimal input that should produce a known output. Run it to verify the code path works.
+2. **Dry run with tiny data.** Run the full pipeline on a small subset (e.g. 10 samples, 1 epoch) to check:
+   - Code runs without errors
+   - Output format is correct
+   - Metrics are computed and logged
+   - No OOM or resource issues
+3. **Only after dry run passes:** launch the full experiment.
+
+```bash
+# Example dry run
+python train.py --data subset_10 --epochs 1 --dry-run 2>&1 | tail -20
+```
+
+If the dry run fails, fix the issue and re-run. Do NOT launch full experiments without a passing dry run.
+
+## Step 5: Monitor Running Experiments
+
+Do NOT launch an experiment and leave. Monitor it:
+
+```bash
+# Watch training progress (check every 60 seconds)
+while true; do
+    echo "=== $(date) ==="
+    tail -5 [log_file]
+    sleep 60
+done
+```
+
+Or use the Bash tool with `run_in_background: true` to launch, then periodically check:
+- Is loss decreasing?
+- Are metrics being logged?
+- Any NaN or error in output?
+- GPU utilization normal?
+
+If the experiment stalls, errors, or shows NaN loss, stop it and diagnose before restarting.
+
+## Step 6: Parallelism
 
 List which experiments can run simultaneously for GPU scheduling.
 

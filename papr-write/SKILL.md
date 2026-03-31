@@ -51,6 +51,27 @@ Apply changes in this priority order (to avoid line-number conflicts):
 - **Merging subsections:** Unified topic sentence, integrate, remove second heading.
 - **Caption shortening:** Captions describe *what is shown*. Move interpretation to body.
 
+### Figure Style (when generating or editing figures)
+- Use a consistent color palette (e.g. seaborn, matplotlib default, or venue-specific)
+- NO titles on figures; the caption provides the title
+- Legends must NOT overlay on data (curves, bars, etc.); place outside or in empty space
+- Legend font size should match body text after embedding (~9-10pt)
+- Use hatching patterns on bars/areas for B&W printing readability
+- Axis labels and tick labels must be readable at column width
+
+### Reference Verification (CRITICAL)
+- NEVER write a \cite{} or bib entry from memory. Every reference MUST be verified.
+- Use WebSearch to find the actual paper and its correct bibtex entry.
+- Verify: title, authors, venue, year all match the real publication.
+- If a reference cannot be found via web search, flag it and do NOT include it.
+- No hallucinated references. This is a hard rule.
+
+### Depth Over Breadth
+- Top venues value deep analysis of a phenomenon, not many shallow observations.
+- When writing results/analysis, focus on insightful findings and deep explanations.
+- Prefer 2-3 deeply analyzed results over 10 superficial statistical observations.
+- Every claim should lead to a "why" or "what does this tell us" discussion.
+
 Log every change to `.claude/latest-run/latest/ROUND_STATE.md` under `## Changes this round`.
 
 ---

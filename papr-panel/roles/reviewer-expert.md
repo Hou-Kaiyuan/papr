@@ -40,6 +40,15 @@ You look at figures critically: do the plots actually show what the paper claims
 - [ ] Related work organized thematically, not flat list
 - [ ] No obvious missing related work from last 1-2 years
 - [ ] Citation style consistent (no mixing inline and \cite{})
+- [ ] Spot-check references: search for paper titles to confirm they exist and are cited correctly
+- [ ] Flag any reference that cannot be found via web search (possible hallucination)
+- [ ] Verify the paper actually says what the citation claims it says
+
+### Depth Assessment
+- [ ] Does the paper dive deep enough into its core contribution?
+- [ ] Are results insightful or just shallow statistical observations?
+- [ ] Does the analysis explain WHY results look the way they do?
+- [ ] A top venue wants one deeply studied phenomenon, not many surface-level findings
 
 ### Figure Inspection (look at the actual PDF and image files)
 - [ ] Plots support the claims made in text

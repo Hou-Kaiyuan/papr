@@ -69,22 +69,35 @@ ln -sfn $BASE .claude/latest-run
 ## Round loop
 
 Fully autonomous. No user interaction between rounds.
+CRITICAL: Each round MUST complete ALL 4 phases before starting the next round.
+Do NOT start round N+1 until round N's external review is done and scored.
 
 ```
 for round in 1..N:
     # Point latest to this round's directory
     ln -sfn round-{round} .claude/latest-run/latest
 
+    # Phase 1: Internal panel review
     invoke /papr-panel [paper_dir]
     read .claude/latest-run/latest/ROUND_STATE.md for action list
+
+    # Phase 2: Experiments (conditional)
     if action list has "requires new experiment":
         invoke /papr-experiment [paper_dir]
+
+    # Phase 3: Write + humanize + compile
     invoke /papr-write [paper_dir]
+
+    # Phase 4: External review (MUST complete before next round)
     invoke /papr-review [paper_dir]
-    read .claude/latest-run/latest/ROUND_STATE.md for score
-    if score >= 9: stop early, say "Paper ready. Score: [X]/10"
+
+    # Verify BOTH scores exist for this round before proceeding
+    read .claude/latest-run/latest/ROUND_STATE.md
+    confirm it contains BOTH panel score AND external review score (or "skipped")
+    if combined score >= 9: stop early, say "Paper ready. Score: [X]/10"
 
 # After all rounds complete, print final summary with score progression.
+# Show a table: Round | Internal | External for every round.
 ```
 
 To invoke each skill, use the Skill tool: `skill: "papr-panel", args: "[paper_dir]"`.

@@ -30,18 +30,24 @@ You also care about visual presentation. When looking at figures, you check whet
 - [ ] Method follows from the gap in introduction
 - [ ] Every "X works because Y" backed by theory or experiment
 - [ ] Limitations specific and quantified, not vague
+- [ ] Paper dives deep into its core contribution (not many shallow observations)
+- [ ] Results section has insightful analysis, not just statistical reporting
 
 ### Figure/Table Visual Inspection (look at the actual PDF and image files)
 - [ ] Text inside figures (labels, legends, annotations) readable at column width
 - [ ] Figure text approximately same size as body text after embedding (~9-10pt)
-- [ ] Legends not overlapping data
+- [ ] Legends not overlapping data curves/bars; placed outside data area or in empty space
+- [ ] Legend font size similar to body text after embedding
+- [ ] No titles on figures (caption serves as title)
 - [ ] Sub-figures same size within panels
 - [ ] Captions shorter than body paragraph referencing them
 - [ ] Captions describe *what is shown*, not *what it means*
 - [ ] Up/down arrows on mixed-direction metrics in table headers
 - [ ] Tables span appropriate width (table* for major results)
 - [ ] Best result per column bolded
-- [ ] Color choices work in grayscale (B&W safety)
+- [ ] Color palette consistent across all figures
+- [ ] Hatching patterns used on bars/areas for B&W printing readability
+- [ ] Figures work in grayscale (B&W safety)
 
 ## Wave 1 Template
 
