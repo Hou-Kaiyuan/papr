@@ -59,6 +59,15 @@ Apply changes in this priority order (to avoid line-number conflicts):
 - Use hatching patterns on bars/areas for B&W printing readability
 - Axis labels and tick labels must be readable at column width
 
+### Information Density (conference space is limited)
+- Do NOT just translate a table into a bar plot; that wastes space
+- Figures should show relationships, trends, or visual patterns that tables cannot
+- Good: scatter with trends, heatmaps, qualitative comparisons, ablation curves, attention maps
+- Bad: simple bar plots restating table numbers
+- If a result is extraordinary, visualize it to make the impact obvious
+- Combine related results into multi-panel figures rather than separate figures
+- No duplicate information between figures and tables
+
 ### Reference Verification (CRITICAL)
 - NEVER write a \cite{} or bib entry from memory. Every reference MUST be verified.
 - Use WebSearch to find the actual paper and its correct bibtex entry.

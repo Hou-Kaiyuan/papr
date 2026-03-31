@@ -135,7 +135,32 @@ Or use the Bash tool with `run_in_background: true` to launch, then periodically
 
 If the experiment stalls, errors, or shows NaN loss, stop it and diagnose before restarting.
 
-## Step 6: Parallelism
+## Step 6: Figure & Visualization Design
+
+When experiments produce results that need figures:
+
+### Style Rules
+- Use a consistent color palette (e.g. seaborn, matplotlib default)
+- NO titles on figures; the caption provides the title
+- Legends must NOT overlay on data; place outside or in empty space
+- Legend font size should match body text after embedding (~9-10pt)
+- Use hatching patterns on bars/areas for B&W printing readability
+- Axis labels and tick labels must be readable at column width
+
+### Information Density (conference papers have limited space)
+- Do NOT just translate a table into a bar plot; that wastes space and adds no new information
+- Prefer visualizations that show relationships, trends, or distributions that tables cannot
+- Good figure types: scatter plots with trend lines, heatmaps, t-SNE/UMAP embeddings, qualitative comparisons, ablation curves, attention maps, error analysis grids
+- Each figure should deliver information that is hard to convey in a table
+- If a result is extraordinarily good, visualize it in a way that makes the impact obvious (e.g. qualitative comparison showing dramatic improvement, not just a number)
+- Combine multiple related results into one figure with sub-panels rather than separate figures
+
+### When to use tables vs figures
+- Tables: precise numerical comparisons across many methods/metrics
+- Figures: trends, distributions, qualitative results, spatial patterns, anything visual
+- Do NOT duplicate: if a table shows the numbers, the figure should show something different (e.g. qualitative examples, error cases, ablation curves)
+
+## Step 7: Parallelism
 
 List which experiments can run simultaneously for GPU scheduling.
 

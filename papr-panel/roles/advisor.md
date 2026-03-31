@@ -48,6 +48,10 @@ You also care about visual presentation. When looking at figures, you check whet
 - [ ] Color palette consistent across all figures
 - [ ] Hatching patterns used on bars/areas for B&W printing readability
 - [ ] Figures work in grayscale (B&W safety)
+- [ ] No figure is just a bar-plot translation of a table (wastes space, no new info)
+- [ ] Each figure delivers information that is hard to convey in a table
+- [ ] Figures maximize information density (space is limited at conferences)
+- [ ] No duplicate information between figures and tables
 
 ## Wave 1 Template
 
