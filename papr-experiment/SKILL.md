@@ -48,6 +48,15 @@ Compute: ~[N] GPU-hours
 
 ## Step 3: Verify (Code Inspection)
 
+Run manual checklist AND Codex adversarial review if available:
+
+```
+# If Codex plugin installed, use it for adversarial code review:
+/codex:adversarial-review
+# This challenges design decisions and catches subtle bugs
+```
+
+### Manual checklist:
 - [ ] Script tests the exact paper claim (quote it)
 - [ ] Metric corresponds to the claim (X!=Y -> CRITICAL)
 - [ ] Train/val/test splits disjoint, no test leakage
@@ -82,6 +91,11 @@ while true; do echo "=== $(date) ==="; tail -5 [log_file]; sleep 60; done
 ```
 Check: loss decreasing? Metrics logged? NaN? GPU utilization?
 If stalled or NaN: stop, diagnose, fix, restart.
+
+If debugging is difficult, delegate to Codex:
+```
+/codex:rescue "experiment [name] is producing NaN loss after epoch 3, diagnose and fix"
+```
 
 ## Step 6: Figures
 

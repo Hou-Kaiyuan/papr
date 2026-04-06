@@ -21,7 +21,11 @@ allowed-tools:
 
 # Multi-Agent Paper Review Panel
 
-**Scoring rule:** Each round scored INDEPENDENTLY. Do NOT show agents previous scores.
+**Scoring calibration:** At top venues (NeurIPS, ICLR, CVPR), the mean review score
+is ~5.0/10 and only ~30% of papers are accepted. LLMs are known to inflate scores
+by 1-2 points. All agents MUST be calibrated: if unsure about quality, score LOWER
+not higher. A score of 7+ should mean the paper is genuinely strong. Each round
+scored INDEPENDENTLY — do NOT show agents previous scores.
 
 ## On invocation
 
@@ -77,6 +81,11 @@ You can directly message other panelists using SendMessage:
 2. Read others' reviews as they arrive and respond directly
 3. Challenge points you disagree with, acknowledge good points
 4. When discussion converges, post your final score
+
+## Scoring Calibration
+At top venues, mean score is ~5.0/10. Only ~30% are accepted.
+If you are unsure, score LOWER not higher. A 7+ means genuinely strong.
+Assume most submissions are mediocre unless clearly exceptional.
 
 ## Rules
 - Score independently. Do NOT reference previous rounds.
@@ -138,7 +147,12 @@ You MUST look at actual figures, not just LaTeX code.
 
 Discussion: [DISCUSSION_THREAD.md content, or "Empty" for Wave 1]
 
-Score independently. Do NOT reference previous rounds. Evaluate as a fresh submission.
+## Scoring Calibration
+At top venues, mean score is ~5.0/10 and only ~30% are accepted.
+If you are unsure about quality, score LOWER not higher.
+A score of 7+ means the paper is genuinely strong. Assume most
+submissions are mediocre unless clearly exceptional.
+Score independently. Do NOT reference previous rounds.
 
 Wave [1|2]: [Wave 1: initial review with checklists | Wave 2: respond to others by name]
 

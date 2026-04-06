@@ -6,6 +6,8 @@
 
 If something is only in the appendix, flag it as missing from main text. This is intentional.
 
+**Calibration:** If the main text alone is not convincing, score low. At top venues, mean ~5.0/10. A paper that relies on supplementary for key content is not ready.
+
 ## Checklist
 
 - [ ] All terms/acronyms/symbols defined in main text

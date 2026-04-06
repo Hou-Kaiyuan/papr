@@ -24,7 +24,7 @@ allowed-tools:
 
 Fully autonomous. Do NOT ask the user between rounds. Do NOT pause for confirmation.
 
-Each round: `/papr-panel` -> `/papr-experiment` (if needed) -> `/papr-write` -> `/papr-review`
+Each round: `/papr-panel` -> `/papr-experiment` (if needed) -> `/papr-write` -> `/papr-review` (GPT-5.4 via Codex)
 
 ## On invocation
 
