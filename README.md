@@ -4,12 +4,31 @@
 
 ## Install
 
+### Option A: Symlink (recommended, easy updates)
+
 ```bash
-# Install PAPR skills
+# Clone once
+git clone https://github.com/Hou-Kaiyuan/papr.git ~/papr
+
+# Symlink each skill into Claude Code
+for skill in ~/papr/papr-*; do
+  ln -sfn "$skill" ~/.claude/skills/$(basename "$skill")
+done
+
+# Update anytime with just:
+cd ~/papr && git pull
+```
+
+### Option B: Copy
+
+```bash
 git clone https://github.com/Hou-Kaiyuan/papr.git /tmp/papr
 cp -r /tmp/papr/papr-* ~/.claude/skills/
+```
 
-# Install humanizer (required by papr-write)
+### Humanizer (required by papr-write)
+
+```bash
 git clone https://github.com/blader/humanizer.git ~/.claude/skills/humanizer
 ```
 
