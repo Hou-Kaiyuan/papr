@@ -8,13 +8,13 @@
 
 ```bash
 # Clone once
-git clone https://github.com/Hou-Kaiyuan/papr.git ~/papr
+git clone https://github.com/Hou-Kaiyuan/papr.git ~/.claude/papr
 
 # Symlink skills into Claude Code
-ln -sfn ~/papr/papr-* ~/.claude/skills/
+ln -sfn ~/.claude/papr/papr-* ~/.claude/skills/
 
 # Update anytime with just:
-cd ~/papr && git pull
+cd ~/.claude/papr && git pull
 ```
 
 ### Option B: Copy
