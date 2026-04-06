@@ -10,10 +10,8 @@
 # Clone once
 git clone https://github.com/Hou-Kaiyuan/papr.git ~/papr
 
-# Symlink each skill into Claude Code
-for skill in ~/papr/papr-*; do
-  ln -sfn "$skill" ~/.claude/skills/$(basename "$skill")
-done
+# Symlink skills into Claude Code
+ln -sfn ~/papr/papr-* ~/.claude/skills/
 
 # Update anytime with just:
 cd ~/papr && git pull
