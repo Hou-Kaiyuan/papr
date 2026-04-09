@@ -19,19 +19,37 @@ allowed-tools:
 
 # Experiment Designer + Verifier + Runner
 
+IMPORTANT: Top venue reviewers can tell the difference between "we reframed the
+text" and "we actually ran new experiments." Text-only improvements plateau fast.
+New experimental evidence is what moves a paper from borderline to accept.
+
+Do NOT default to "existing data can answer this" unless it genuinely can with
+a concrete analysis you can point to. Avoid the lazy path of reframing text
+when the real fix is a new experiment.
+
 ## On invocation
 
 1. Read `.claude/latest-run/latest/ROUND_STATE.md` for action list.
-2. Extract "requires new experiment" items. If none: return "No experiments needed."
+2. Read `.claude/latest-run/latest/DISCUSSION_THREAD.md` for full reviewer feedback.
+3. Extract ALL items where reviewers raised:
+   - Explicitly marked "requires new experiment"
+   - Weak experimental evidence for a claim
+   - Missing ablations
+   - Unsupported assumptions
+   - Requests for additional baselines or comparisons
+   - "Why does this work?" without a satisfying answer in the paper
+4. If genuinely nothing needs experiments: return "No experiments needed."
+   But be honest -- most papers reviewed at top venues DO need more experiments.
 
-## Step 1: Check Before Designing
+## Step 1: Triage
 
-For each item, ask:
-- Existing result already answers this? (better presentation, not new experiment)
-- In appendix but not main text? (move up, don't re-run)
-- Existing data re-analyzable? (subset, different metric)
+For each item, classify honestly:
+- **MUST experiment:** The claim has no supporting evidence without this
+- **SHOULD experiment:** Evidence exists but is weak; a new experiment would be convincing
+- **CAN skip:** Existing data genuinely answers this (cite the specific table/figure)
 
-Only design if none apply.
+Default to MUST or SHOULD. Only classify as CAN skip if you can point to a
+specific existing result that directly addresses the reviewer's concern.
 
 ## Step 2: Design
 
@@ -39,10 +57,12 @@ Only design if none apply.
 ### Experiment: [Name]
 Motivation: [claim addressed]
 Priority: BLOCKER | HIGH | MEDIUM | LOW
+Impact: [what accepting this paper depends on this experiment?]
 Metric: [name, direction]
 Conditions: Ours vs Baseline A [verify SOTA via WebSearch] vs Baseline B
 Dataset: [name, split, preprocessing]
-Expected: if claim holds [numbers] / if fails [what we'd see]
+Expected: if claim holds [numbers] / if fails [what we'd see, and what
+  that means for the paper -- be honest about this]
 Compute: ~[N] GPU-hours
 ```
 
@@ -83,7 +103,7 @@ python train.py --data subset_10 --epochs 1 --dry-run 2>&1 | tail -20
 ```
 3. Only after dry run passes: launch full experiment.
 
-## Step 5: Monitor
+## Step 5: Run and Monitor
 
 Do NOT launch and leave. Monitor:
 ```bash
@@ -96,6 +116,9 @@ If debugging is difficult, delegate to Codex:
 ```
 /codex:rescue "experiment [name] is producing NaN loss after epoch 3, diagnose and fix"
 ```
+
+Long-running experiments are expected and acceptable. A 2-hour training run that
+produces a convincing ablation is worth more than 10 text-only edits.
 
 ## Step 6: Figures
 
@@ -115,9 +138,11 @@ List which experiments can run simultaneously.
 
 Write to `.claude/latest-run/latest/ROUND_STATE.md`:
 ```
-## Experiment Plan
-1. [Name] -- [Priority] -- [~N GPU-hours] -- Verification: PASSED|BLOCKED
-Parallel: [list]
-Total compute: ~[N] GPU-hours
-CRITICAL issues: [N]
+## Experiment Results
+### Completed:
+1. [Name] -- [metric result] -- [supports/contradicts claim]
+### Skipped (with justification):
+1. [Name] -- [why: specific existing result that answers this]
+### Figures generated: [list]
+### New tables: [list]
 ```

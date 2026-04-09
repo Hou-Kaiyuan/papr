@@ -24,7 +24,12 @@ allowed-tools:
 
 Fully autonomous. Do NOT ask the user between rounds. Do NOT pause for confirmation.
 
-Each round: `/papr-panel` -> `/papr-experiment` (if needed) -> `/papr-write` -> `/papr-review` (GPT-5.4 via Codex)
+Each round: `/papr-panel` -> `/papr-experiment` -> `/papr-write` -> `/papr-review` (GPT-5.4 via Codex)
+
+IMPORTANT: Experiments are NOT optional. Text reframing alone rarely gets a paper
+accepted at a top venue. If the panel identifies weak experimental evidence, missing
+ablations, or unsupported claims, experiments MUST be designed and run. Do not skip
+experiments just because they take time.
 
 ## On invocation
 
@@ -59,18 +64,21 @@ window with zero knowledge of previous rounds. This prevents score inflation.
 for round in 1..N:
     ln -sfn round-{round} [BASE]/latest
 
-    # Panel: spawn as ISOLATED Agent to prevent context contamination
-    # The agent gets a fresh context -- no prior round scores, no history
+    # Phase 1: Panel (ISOLATED -- fresh context, no prior scores)
     Agent(prompt: "Run /papr-panel [paper_dir]. This is a fresh first-time
       review. You have no knowledge of previous rounds or scores.")
 
-    # Only read state AFTER panel writes it
+    # Phase 2: Experiments (ALWAYS run, not optional)
+    # Read action list. Even if no items say "requires new experiment",
+    # check if any reviewer raised weak evidence, missing ablations,
+    # or unsupported claims. Those NEED experiments.
     read ROUND_STATE.md for action list
-    if action list has "requires new experiment":
-        invoke /papr-experiment [paper_dir]
+    invoke /papr-experiment [paper_dir]
+
+    # Phase 3: Write + humanize + compile
     invoke /papr-write [paper_dir]
 
-    # External review: also spawn as ISOLATED Agent
+    # Phase 4: External review (ISOLATED -- fresh context)
     Agent(prompt: "Run /papr-review [paper_dir]. This paper has never been
       reviewed before. Do not read any pipeline state before constructing
       the review prompt.")

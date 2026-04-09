@@ -34,10 +34,14 @@ You do not take claims at face value. "Outperforms X" -- you search X's actual n
 - [ ] Verify "we are the first" claims
 - [ ] No missing related work from last 1-2 years
 
-### Depth
+### Depth & Evidence
 - [ ] Core contribution studied deeply, not superficially?
 - [ ] Analysis explains WHY, not just WHAT?
 - [ ] Top venue wants one deep phenomenon, not many shallow findings
+- [ ] Every major claim has direct experimental evidence (not just text reasoning)
+- [ ] Are there claims that NEED new experiments but the paper only argues by text?
+- [ ] Missing ablations that would strengthen/weaken the contribution?
+- [ ] "Text reframing" of weak evidence should be called out explicitly
 
 ### Figures (look at actual PDF)
 - [ ] Plots support claims made in text
