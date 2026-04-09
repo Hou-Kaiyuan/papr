@@ -51,23 +51,29 @@ ln -sfn $BASE .claude/latest-run
 
 Each round MUST complete ALL 4 phases before starting the next.
 
-CRITICAL: When invoking /papr-panel, do NOT mention the round number, previous
-scores, or any context from prior rounds. The panel must believe this is a fresh
-first-time review. Pass ONLY the paper_dir argument.
+CRITICAL ISOLATION: Panel and external review MUST run without any prior-round
+context. Spawn them as isolated Agents so they get a completely fresh context
+window with zero knowledge of previous rounds. This prevents score inflation.
 
 ```
 for round in 1..N:
     ln -sfn round-{round} [BASE]/latest
 
-    # Panel gets NO round context -- fresh blind review each time
-    invoke /papr-panel [paper_dir]
+    # Panel: spawn as ISOLATED Agent to prevent context contamination
+    # The agent gets a fresh context -- no prior round scores, no history
+    Agent(prompt: "Run /papr-panel [paper_dir]. This is a fresh first-time
+      review. You have no knowledge of previous rounds or scores.")
 
     # Only read state AFTER panel writes it
     read ROUND_STATE.md for action list
     if action list has "requires new experiment":
         invoke /papr-experiment [paper_dir]
     invoke /papr-write [paper_dir]
-    invoke /papr-review [paper_dir]
+
+    # External review: also spawn as ISOLATED Agent
+    Agent(prompt: "Run /papr-review [paper_dir]. This paper has never been
+      reviewed before. Do not read any pipeline state before constructing
+      the review prompt.")
 
     # Verify BOTH scores exist before proceeding
     read ROUND_STATE.md -> confirm panel score + external score (or "skipped")
@@ -76,8 +82,9 @@ for round in 1..N:
 # Print final table: Round | Internal | External
 ```
 
-Invoke skills via: `skill: "papr-panel", args: "[paper_dir]"`
-Do NOT add round numbers or context to the args.
+Panel and review are invoked via Agent tool (fresh context), NOT via Skill tool
+(which would inherit the pipeline's contaminated context).
+Experiment and write CAN use Skill tool since they need prior round context.
 
 ## Output
 
