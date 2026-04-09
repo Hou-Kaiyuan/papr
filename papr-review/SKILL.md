@@ -12,6 +12,7 @@ allowed-tools:
   - Grep
   - Glob
   - Bash
+  - Agent
   - mcp__codex__codex
   - mcp__codex__codex-reply
 ---
@@ -22,14 +23,30 @@ Sends finished paper to Codex for independent review using GPT-5.4.
 
 ## Prerequisites
 
-Codex plugin must be installed:
+Install Codex via EITHER the plugin (preferred) or the MCP server (legacy):
+
+**Option A: Codex Plugin (preferred)**
 ```
 /plugin marketplace add openai/codex-plugin-cc
 /plugin install codex@openai-codex
 /codex:setup
 ```
 
-If Codex unavailable: write "External review skipped -- Codex not available." to `ROUND_STATE.md` and return.
+**Option B: Codex MCP (legacy)**
+```bash
+npm install -g @openai/codex
+codex login
+claude mcp add codex -s user -- codex mcp-server
+```
+
+If neither available: write "External review skipped -- Codex not available." to `ROUND_STATE.md` and return.
+
+## How to send the review
+
+Try in this order:
+1. If Codex plugin installed: use `codex:codex-cli-runtime` skill to send the prompt
+2. If Codex MCP available: use `mcp__codex__codex` tool to send the prompt
+3. If neither: skip and log
 
 ## On invocation
 

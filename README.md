@@ -30,24 +30,32 @@ cp -r /tmp/papr/papr-* ~/.claude/skills/
 git clone https://github.com/blader/humanizer.git ~/.claude/skills/humanizer
 ```
 
-### Codex Plugin (for external review + code inspection)
+### Codex (for external review + code inspection)
 
 Uses GPT-5.4 via Codex for blind external review (`/papr-review`) and adversarial
-code review (`/papr-experiment`). Also provides `/codex:rescue` for debugging.
+code review (`/papr-experiment`). Install via EITHER method:
 
+**Option A: Codex Plugin (preferred)**
 ```bash
-# Install Codex CLI
 npm install -g @openai/codex
 codex login
 
-# Install Codex plugin for Claude Code
+# Inside Claude Code:
 /plugin marketplace add openai/codex-plugin-cc
 /plugin install codex@openai-codex
 /reload-plugins
 /codex:setup
 ```
 
-Requires ChatGPT subscription or OpenAI API key. Node.js 18.18+.
+**Option B: Codex MCP (legacy)**
+```bash
+npm install -g @openai/codex
+codex login
+claude mcp add codex -s user -- codex mcp-server
+```
+
+Both require ChatGPT subscription or OpenAI API key. Node.js 18.18+.
+papr-review auto-detects which is available.
 
 ### Optional: Agent Teams (for live panel cross-talk)
 
