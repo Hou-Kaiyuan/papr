@@ -51,11 +51,19 @@ ln -sfn $BASE .claude/latest-run
 
 Each round MUST complete ALL 4 phases before starting the next.
 
+CRITICAL: When invoking /papr-panel, do NOT mention the round number, previous
+scores, or any context from prior rounds. The panel must believe this is a fresh
+first-time review. Pass ONLY the paper_dir argument.
+
 ```
 for round in 1..N:
     ln -sfn round-{round} [BASE]/latest
 
+    # Panel gets NO round context -- fresh blind review each time
     invoke /papr-panel [paper_dir]
+
+    # Only read state AFTER panel writes it
+    read ROUND_STATE.md for action list
     if action list has "requires new experiment":
         invoke /papr-experiment [paper_dir]
     invoke /papr-write [paper_dir]
@@ -69,6 +77,7 @@ for round in 1..N:
 ```
 
 Invoke skills via: `skill: "papr-panel", args: "[paper_dir]"`
+Do NOT add round numbers or context to the args.
 
 ## Output
 

@@ -29,9 +29,12 @@ scored INDEPENDENTLY — do NOT show agents previous scores.
 
 ## On invocation
 
-1. Read `.claude/latest-run/latest/ROUND_STATE.md` (ignore error if missing). Do NOT pass previous scores to agents.
-2. Write fresh empty `.claude/latest-run/latest/DISCUSSION_THREAD.md`.
-3. Check mode: run `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`
+CRITICAL: Do NOT read ROUND_STATE.md before spawning agents. Reading it contaminates
+your context with previous scores, which leaks into agent prompts even if you try
+not to pass them. Only read ROUND_STATE.md AFTER wave 2 to write results.
+
+1. Write fresh empty `.claude/latest-run/latest/DISCUSSION_THREAD.md`.
+2. Check mode: run `echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`
    - If `1`: use **Agent Teams mode** (live cross-talk)
    - Otherwise: use **Wave mode** (2-wave subagents)
 
@@ -64,13 +67,16 @@ Agent(team_name: "papr-panel", name: "author",   prompt: [author role + paper])
 Each teammate's prompt includes:
 
 ```
-You are [ROLE] in a live paper review panel (Agent Teams mode).
+You are [ROLE] reviewing a paper submitted to a top ML/CV venue.
+This is a FRESH review. You have never seen this paper before.
 
 [paste roles/[role].md]
 
 Paper location: [paper_dir]
 - Read .tex files, main.pdf, and figures/ directory
 - You MUST look at actual figures
+- Do NOT read ROUND_STATE.md or any pipeline state files
+- Do NOT look at git history or diffs
 
 You can directly message other panelists using SendMessage:
   SendMessage(target_name: "expert", content: "Your response to their point")
@@ -88,7 +94,7 @@ If you are unsure, score LOWER not higher. A 7+ means genuinely strong.
 Assume most submissions are mediocre unless clearly exceptional.
 
 ## Rules
-- Score independently. Do NOT reference previous rounds.
+- This is a BLIND review. You know NOTHING about previous versions or revisions.
 - Address other reviewers by name when responding
 - Keep exchanges focused and specific
 - AUTHOR: post your final action list when discussion winds down
@@ -135,7 +141,8 @@ Same agents, same pattern with `wave2_*.md`. Each reads full `DISCUSSION_THREAD.
 ### Agent Prompt (Wave Mode)
 
 ```
-You are [ROLE] reviewing an academic paper.
+You are [ROLE] reviewing a paper submitted to a top ML/CV venue.
+This is a FRESH review. You have never seen this paper before.
 
 [paste roles/[role].md]
 
@@ -144,6 +151,8 @@ Paper location: [paper_dir]
 - Read main.pdf for visual layout
 - Read figures/ directory for individual figure inspection
 You MUST look at actual figures, not just LaTeX code.
+Do NOT read ROUND_STATE.md or any pipeline state files.
+Do NOT look at git history or diffs.
 
 Discussion: [DISCUSSION_THREAD.md content, or "Empty" for Wave 1]
 
@@ -152,7 +161,7 @@ At top venues, mean score is ~5.0/10 and only ~30% are accepted.
 If you are unsure about quality, score LOWER not higher.
 A score of 7+ means the paper is genuinely strong. Assume most
 submissions are mediocre unless clearly exceptional.
-Score independently. Do NOT reference previous rounds.
+This is a BLIND review. You know NOTHING about previous versions.
 
 Wave [1|2]: [Wave 1: initial review with checklists | Wave 2: respond to others by name]
 
