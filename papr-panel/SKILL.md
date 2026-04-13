@@ -51,15 +51,30 @@ When `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, agents run as teammates with dire
 if [ "$CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" = "1" ]; then echo "TEAMS"; else echo "WAVES"; fi
 ```
 
-### 1. Spawn all 6 teammates
+### 0. Clean up any existing team FIRST
+
+BEFORE creating the team, always try to delete any existing "papr-panel" team:
 
 ```
-Agent(team_name: "papr-panel", name: "advisor",  prompt: [advisor role + paper])
-Agent(team_name: "papr-panel", name: "expert",   prompt: [expert role + paper])
-Agent(team_name: "papr-panel", name: "standard", prompt: [standard role + paper])
-Agent(team_name: "papr-panel", name: "brief",    prompt: [brief role + paper])
-Agent(team_name: "papr-panel", name: "lay",      prompt: [lay role + paper])
-Agent(team_name: "papr-panel", name: "author",   prompt: [author role + paper])
+try: TeamDelete(team_name: "papr-panel")
+catch: ignore (no existing team)
+```
+
+This prevents the "Already leading team" error when running multiple rounds.
+
+### 1. Spawn all 6 teammates
+
+Use a unique team name per run with timestamp to avoid conflicts:
+
+```
+team_name = "papr-panel-$(date +%s)"
+
+Agent(team_name: [team_name], name: "advisor",  prompt: [advisor role + paper])
+Agent(team_name: [team_name], name: "expert",   prompt: [expert role + paper])
+Agent(team_name: [team_name], name: "standard", prompt: [standard role + paper])
+Agent(team_name: [team_name], name: "brief",    prompt: [brief role + paper])
+Agent(team_name: [team_name], name: "lay",      prompt: [lay role + paper])
+Agent(team_name: [team_name], name: "author",   prompt: [author role + paper])
 ```
 
 ### 2. Teammate instructions
@@ -72,21 +87,35 @@ This is a FRESH review. You have never seen this paper before.
 
 [paste roles/[role].md]
 
+## MANDATORY TOOL USE
+You MUST use tools to complete this review. A review with 0 tool uses is invalid.
+
+Required reads (use the Read tool):
+1. [paper_dir]/main.tex (or the main .tex file)
+2. Any \input{} files referenced from main.tex (method.tex, evaluation.tex, etc.)
+3. [paper_dir]/main.pdf (for visual layout)
+4. Individual figures in [paper_dir]/figures/ (at least 3 figure files)
+
+You MUST read at least 5 files before writing your review.
+Do NOT just respond from prompt text -- actually Read the paper files.
+
+EXPERT and LAY roles: you MUST also use WebSearch at least 2 times.
+
 Paper location: [paper_dir]
-- Read .tex files, main.pdf, and figures/ directory
-- You MUST look at actual figures
 - Do NOT read ROUND_STATE.md or any pipeline state files
 - Do NOT look at git history or diffs
 
+## Communication
 You can directly message other panelists using SendMessage:
   SendMessage(target_name: "expert", content: "Your response to their point")
   SendMessage(type: "broadcast", content: "Message to all panelists")
 
 ## Workflow
-1. Read the paper and post your initial review (broadcast to all)
-2. Read others' reviews as they arrive and respond directly
-3. Challenge points you disagree with, acknowledge good points
-4. When discussion converges, post your final score
+1. READ the paper files (tool use required)
+2. Post your initial review (broadcast to all)
+3. Read others' reviews as they arrive and respond directly
+4. Challenge points you disagree with, acknowledge good points
+5. When discussion converges, post your final score
 
 ## Scoring Calibration
 At top venues, mean score is ~5.0/10. Only ~30% are accepted.
@@ -100,7 +129,8 @@ Assume most submissions are mediocre unless clearly exceptional.
 - AUTHOR: post your final action list when discussion winds down
 - ADVISOR: post synthesis + final scores when all reviews are in
 
-Write your final review to .claude/latest-run/latest/[role]_review.md
+Use the Write tool to save your final review to:
+  .claude/latest-run/latest/[role]_review.md
 ```
 
 ### 3. Lead monitors and collects
@@ -111,7 +141,7 @@ The lead (this agent) monitors the team:
 - Collect all `[role]_review.md` files
 - Merge into `DISCUSSION_THREAD.md`
 - Write panel summary to `ROUND_STATE.md`
-- Clean up: delete team
+- **MANDATORY cleanup:** `TeamDelete(team_name: [team_name])` — do NOT skip this
 
 ---
 
@@ -146,11 +176,20 @@ This is a FRESH review. You have never seen this paper before.
 
 [paste roles/[role].md]
 
+## MANDATORY TOOL USE
+You MUST use tools to complete this review. A review with 0 tool uses is invalid.
+
+Required reads (use the Read tool):
+1. [paper_dir]/main.tex (or the main .tex file)
+2. Any \input{} files referenced from main.tex
+3. [paper_dir]/main.pdf (for visual layout)
+4. Individual figures in [paper_dir]/figures/ (at least 3 figure files)
+
+You MUST read at least 5 files before writing your review.
+Do NOT just respond from prompt text -- actually Read the paper files.
+EXPERT and LAY: you MUST also use WebSearch at least 2 times.
+
 Paper location: [paper_dir]
-- Read .tex source files for text
-- Read main.pdf for visual layout
-- Read figures/ directory for individual figure inspection
-You MUST look at actual figures, not just LaTeX code.
 Do NOT read ROUND_STATE.md or any pipeline state files.
 Do NOT look at git history or diffs.
 
