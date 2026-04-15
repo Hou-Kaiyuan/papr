@@ -35,9 +35,10 @@ experiments just because they take time.
 
 1. `paper_dir` = second argument. If missing, ask once and wait.
 2. `N` = first argument (default 3).
-3. Setup directories and state:
+3. Setup directories and state. The unique timestamp ensures isolation from
+   previous runs. Each pipeline invocation gets its own directory.
 ```bash
-BASE=.claude/papr-$(date +%m-%d-%H)
+BASE=.claude/papr-$(date +%m-%d-%H-%M-%S)
 mkdir -p $BASE/round-{1..$N}
 ln -sfn round-1 $BASE/latest
 ln -sfn $BASE .claude/latest-run

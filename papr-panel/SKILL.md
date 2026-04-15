@@ -192,6 +192,10 @@ EXPERT and LAY: you MUST also use WebSearch at least 2 times.
 Paper location: [paper_dir]
 Do NOT read ROUND_STATE.md or any pipeline state files.
 Do NOT look at git history or diffs.
+Do NOT explore the .claude/ directory or any subdirectories within it.
+Do NOT run `ls .claude/`, `find .claude/`, or any filesystem exploration there.
+Only read files explicitly listed in this prompt (paper .tex, main.pdf, figures/).
+You only have access to the current paper -- no other run history exists for you.
 
 Discussion: [DISCUSSION_THREAD.md content, or "Empty" for Wave 1]
 

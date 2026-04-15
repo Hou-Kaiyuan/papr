@@ -52,12 +52,14 @@ Try in this order:
 
 CRITICAL: Do NOT read ROUND_STATE.md before sending to Codex. Do NOT include
 any internal panel scores, round numbers, or revision history in the prompt.
+Do NOT explore the .claude/ directory or look for previous run history.
+Do NOT run `ls .claude/`, `find .claude/`, or any filesystem exploration there.
 Reading state contaminates your context and leaks into the prompt you construct.
 
 1. Read paper .tex files from `[paper_dir]`. Strip `\author{}` commands.
 2. Construct the review prompt below with ONLY the paper text.
 3. Send to Codex.
-4. AFTER receiving the review, read ROUND_STATE.md to write the comparison.
+4. AFTER receiving the review, read ROUND_STATE.md (current run only) to write the comparison.
 
 ## Isolation
 
