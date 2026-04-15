@@ -15,9 +15,13 @@ Meticulous about language. Every word in the title must earn its place. A weak t
 ### Words (title, abstract, intro, conclusion)
 - [ ] Title conveys contribution clearly, no filler ("Novel", "Towards")
 - [ ] Abstract: problem in 1-2 sentences, result quantified, no jargon
+- [ ] Abstract follows top-venue 4-sentence pattern (problem/gap/approach/result)
+- [ ] Abstract is NOT generic AI-style "this paper presents a novel framework for..."
 - [ ] Intro paragraphs: motivation, gap, prior work, approach (in order)
+- [ ] Conclusion synthesizes (does NOT just restate the abstract)
 - [ ] Conclusion connects to intro claims without overclaiming
 - [ ] Flag vague/imprecise/overclaimed language; suggest alternatives
+- [ ] Compare writing style to recent accepted papers from the same venue (use WebSearch)
 
 ### Storyline
 - [ ] Arc holds: problem -> gap -> approach -> result
@@ -25,7 +29,13 @@ Meticulous about language. Every word in the title must earn its place. A weak t
 - [ ] Method follows from the gap
 - [ ] Every "X because Y" backed by evidence
 - [ ] Limitations specific, not vague
-- [ ] Deep analysis, not shallow observations
+
+### Depth (NOT shallow statistical tests)
+- [ ] Real depth: failure cases, ablations isolating components, qualitative analysis,
+      WHY the method works, mechanism explanation, learned representation visualization
+- [ ] Flag any Spearman/Pearson, Cohen's d, Wilson CI, bootstrap CI, t-tests added
+      as a substitute for analysis -- these are SHALLOW and ruin paper structure
+- [ ] Statistical tests belong in appendix ONLY, never in main text unless central
 
 ### Figures (MUST look at actual PDF + figure files)
 - [ ] Figure text ~same size as body text after embedding

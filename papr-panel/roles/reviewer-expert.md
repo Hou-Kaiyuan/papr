@@ -42,6 +42,11 @@ You do not take claims at face value. "Outperforms X" -- you search X's actual n
 - [ ] Are there claims that NEED new experiments but the paper only argues by text?
 - [ ] Missing ablations that would strengthen/weaken the contribution?
 - [ ] "Text reframing" of weak evidence should be called out explicitly
+- [ ] FLAG superficial statistics: Spearman/Pearson, Cohen's d, Wilson CI,
+      bootstrap CI, t-tests, p-values used as a substitute for real analysis.
+      These belong in appendix only, never as primary contribution.
+- [ ] Real depth = failure analysis, ablations isolating components, qualitative
+      study, WHY mechanism, representation visualization. NOT statistical tests.
 
 ### Figures (look at actual PDF)
 - [ ] Plots support claims made in text

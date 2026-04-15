@@ -60,6 +60,30 @@ confirm title/authors/venue/year, and use the real bibtex. No hallucinated refer
 ### Depth Over Breadth
 - Prefer 2-3 deeply analyzed results over 10 shallow observations
 - Every claim should lead to "why" or "what does this tell us"
+- Do NOT add Spearman/Pearson correlation, Cohen's d, Wilson CI, bootstrap CI,
+  t-tests, or p-values as a substitute for analysis. These are SHALLOW and
+  ruin paper structure. Only include if absolutely central to a claim.
+
+### Writing Style (model after top-tier papers)
+
+Before writing or rewriting any major section (especially abstract, intro,
+conclusion), use WebSearch to find 2-3 recent published papers from the same
+venue (NeurIPS, ICLR, CVPR, etc.) on similar topics. Read how they:
+- Structure the abstract (4-sentence pattern: problem -> gap -> approach -> result)
+- Open the introduction (concrete motivation, not generic)
+- Frame the contributions (specific and verifiable, not vague)
+- Write the conclusion (synthesizes, does NOT just restate)
+
+Match the tone, density, and structure of accepted papers. Do NOT generate
+generic AI-style "this paper presents a novel framework for..." text.
+
+Specific section guidance:
+- **Abstract**: ~150-200 words, 4-5 sentences. Problem -> approach -> result
+  with quantified numbers. No jargon, no method names without context.
+- **Introduction**: 4 paragraphs typically. Real-world motivation, technical
+  gap, prior work shortcomings, proposed approach. NO equations.
+- **Conclusion**: Synthesizes contributions and points to future work.
+  Does NOT restate the abstract. ~1 paragraph.
 
 Log changes to `.claude/latest-run/latest/ROUND_STATE.md`.
 

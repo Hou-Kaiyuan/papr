@@ -27,6 +27,34 @@ Do NOT default to "existing data can answer this" unless it genuinely can with
 a concrete analysis you can point to. Avoid the lazy path of reframing text
 when the real fix is a new experiment.
 
+## DO NOT add these as "deep analysis" (they are SHALLOW)
+
+Do NOT add the following statistical tests as a substitute for real analysis:
+- Spearman/Pearson correlation
+- Cohen's d, Cohen's kappa
+- Wilson confidence intervals
+- Bootstrap CI / bootstrapped error bars
+- t-tests, p-values, significance tests
+- Any "we computed X coefficient/test" without it being central to the claim
+
+These are the SHALLOW analyses reviewers complain about. Adding them ruins paper
+structure and signals the authors don't have a real story. They belong in
+appendices ONLY if absolutely necessary for one specific claim.
+
+## What "deep analysis" actually means
+
+Deep analysis means understanding WHY the method works:
+- Failure case studies: when does the method fail? Why?
+- Ablations that isolate which component contributes what
+- Qualitative analysis of model behavior (attention, embeddings, mistakes)
+- Comparison of HOW (not just IF) different methods solve the same problem
+- Discovery of unexpected behavior and explanation of the mechanism
+- Visualization of the learned representation/decision boundary
+
+Example: "Our method outperforms X by 5%" is a number. Deep analysis is "X fails
+on long-tail cases because Y; we visualize this in Figure 3 and confirm with
+ablation Z that removing the long-tail component drops performance to baseline."
+
 ## On invocation
 
 1. Read `.claude/latest-run/latest/ROUND_STATE.md` for action list.
