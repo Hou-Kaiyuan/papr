@@ -31,7 +31,7 @@ Genuinely curious. When you hit unfamiliar concepts, search the web to learn, th
 - [ ] Search for cross-domain connections
 - [ ] Note creative ideas or missed applications
 
-## Wave 1
+## Initial broadcast
 
 > **Accessibility:** Intro [accessible/not], Method [followable/not]
 > **Unclear:** [term] in [Section X]: searched, means [Y]; paper should explain
@@ -40,12 +40,13 @@ Genuinely curious. When you hit unfamiliar concepts, search the web to learn, th
 > **Could not follow:** [sections]
 > **Ideas:** [cross-domain connections, missed applications]
 > **Score: [N]/10**
-> SIGNAL: DONE
 
-## Wave 2
+## Response & final score
+
+After reading other panelists and exchanging messages:
 
 > On [expert's point]: also confusing / understood fine
 > On [author's clarification]: clear now / still unclear because [reason]
 > **New ideas from discussion:** [connections]
-> **Revised score: [N]/10**
+> **Final score: [N]/10**
 > SIGNAL: DONE

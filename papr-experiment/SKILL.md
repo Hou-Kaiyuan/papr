@@ -1,10 +1,10 @@
 ---
 name: papr-experiment
 description: |
-  Design, verify, and run experiments from reviewer feedback. Use when the
-  user says "design experiments", "run ablation", "need new results", or
-  when papr-panel action list has "requires new experiment" items. Includes
-  TDD verification and experiment monitoring.
+  Designs, verifies, runs, and monitors experiments from reviewer feedback,
+  with TDD dry-runs and figure generation. Use when the user says "design
+  experiments", "run ablation", "need new results", or when a papr-panel action
+  list contains "requires new experiment" items.
 argument-hint: "[paper_dir]"
 allowed-tools:
   - Read
@@ -14,6 +14,7 @@ allowed-tools:
   - Glob
   - Bash
   - WebSearch
+  - WebFetch
   - Agent
 ---
 
@@ -34,12 +35,20 @@ Do NOT add the following statistical tests as a substitute for real analysis:
 - Cohen's d, Cohen's kappa
 - Wilson confidence intervals
 - Bootstrap CI / bootstrapped error bars
-- t-tests, p-values, significance tests
-- Any "we computed X coefficient/test" without it being central to the claim
+- t-tests, paired/unpaired
+- McNemar's test
+- Fisher's exact test
+- Chi-squared test
+- p-values and "statistically significant (p<0.05)" framing
+- ANY "we computed X coefficient/test" without it being central to the claim
+- ANY sentence whose main point is "the difference is significant" rather than
+  "the difference is X percentage points and is caused by Y mechanism"
 
 These are the SHALLOW analyses reviewers complain about. Adding them ruins paper
-structure and signals the authors don't have a real story. They belong in
-appendices ONLY if absolutely necessary for one specific claim.
+structure and signals the authors don't have a real story. Top-venue reviewers
+read "we ran McNemar's test, p=0.03" as a substitute for actual insight, not as
+evidence of rigor. They belong in appendices ONLY if absolutely necessary for
+one specific claim, and even then they should not be the primary contribution.
 
 ## What "deep analysis" actually means
 
@@ -57,8 +66,8 @@ ablation Z that removing the long-tail component drops performance to baseline."
 
 ## On invocation
 
-1. Read `.claude/latest-run/latest/ROUND_STATE.md` for action list.
-2. Read `.claude/latest-run/latest/DISCUSSION_THREAD.md` for full reviewer feedback.
+1. Read `papr-runs/latest-run/latest/ROUND_STATE.md` for action list.
+2. Read `papr-runs/latest-run/latest/DISCUSSION_THREAD.md` for full reviewer feedback.
 3. Extract ALL items where reviewers raised:
    - Explicitly marked "requires new experiment"
    - Weak experimental evidence for a claim
@@ -162,9 +171,18 @@ When experiments produce figures:
 
 List which experiments can run simultaneously.
 
+## Step 8: New citations from this round
+
+If experiments introduce new baselines, datasets, or methods that the paper now
+cites, follow the same bibtex-download workflow as papr-write: WebSearch the
+paper, download the actual `.bib` file (arXiv `/bibtex/<id>`, ACL Anthology
+BibTeX export, OpenReview, or Semantic Scholar API), and save it to
+`[paper_dir]/references/<citekey>.bib`. Never fabricate a bibtex entry from
+memory -- if you cannot locate the paper, drop the comparison or the claim.
+
 ## Output
 
-Write to `.claude/latest-run/latest/ROUND_STATE.md`:
+Write to `papr-runs/latest-run/latest/ROUND_STATE.md`:
 ```
 ## Experiment Results
 ### Completed:

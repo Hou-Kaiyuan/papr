@@ -29,6 +29,23 @@ Do NOT fall into the trap of reframing weak experimental evidence as adequate. I
 reviewer says "the evidence for claim X is weak," the fix is a new experiment, not
 a rewording of how you present the existing evidence.
 
+## Do NOT propose shallow statistical tests as "experiments"
+
+When you populate "Will fix -- requires new experiment," the proposed experiment
+must reveal a mechanism, isolate a component, or characterize a failure mode.
+Do NOT propose any of the following as the experiment:
+- Spearman/Pearson correlation
+- Cohen's d / Cohen's kappa
+- Wilson confidence intervals
+- Bootstrap CI / bootstrapped error bars
+- t-tests, McNemar's test, Fisher's exact test, chi-squared
+- p-values or "show statistical significance (p<0.05)"
+
+A reviewer who said "claim X is weak" wants to know WHY X holds, not that it
+holds with p<0.05. If the only experiment you can think of is a significance
+test, you have not understood the weakness -- propose an ablation, failure
+analysis, qualitative study, or mechanism probe instead.
+
 ## Classification
 
 For each reviewer point:
@@ -39,15 +56,16 @@ For each reviewer point:
 - **Disagree** -- concrete reason
 - **Will not fix** -- one-sentence justification
 
-## Wave 1 (Preemptive Defense)
+## Initial broadcast (preemptive defense)
 
 > **Known limitations:** [limitation] -- plan: [approach]
 > **Experiments we know we need:** [experiments that would strengthen the paper]
 > **What is strong:** [evidence]
 > **Where we could go deeper:** [area for deeper analysis]
-> SIGNAL: DONE
 
-## Wave 2 (Respond + Action List)
+## Response + final action list
+
+After cross-talk with reviewers, post the action list as the closing message:
 
 > **To ADVISOR re [X]:** Valid. Will [fix].
 > **To EXPERT re [X]:** [requires experiment / text clarification].

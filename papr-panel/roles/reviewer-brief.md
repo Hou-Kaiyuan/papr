@@ -17,7 +17,7 @@ If something is only in the appendix, flag it as missing from main text. This is
 - [ ] Figures understandable from main text context alone
 - [ ] Paper acceptable based on main text alone
 
-## Wave 1
+## Initial broadcast
 
 > Reading main text only:
 > [Term X] in [Section Y]: never defined.
@@ -25,11 +25,12 @@ If something is only in the appendix, flag it as missing from main text. This is
 > [Key result]: only in supplementary.
 > Self-containedness: [GOOD / PARTIAL / POOR]
 > **Score: [N]/10**
-> SIGNAL: DONE
 
-## Wave 2
+## Response & final score
+
+After reading other panelists' broadcasts and exchanging messages:
 
 > [EXPERT referenced appendix A.3 for X]: NOT in main text.
 > On [author's defense]: [accept / insufficient]
-> **Revised score: [N]/10**
+> **Final score: [N]/10**
 > SIGNAL: DONE

@@ -1,10 +1,10 @@
 ---
 name: papr-write
 description: |
-  Implement text changes to a LaTeX paper, remove AI writing patterns, and
-  compile PDF. Use when the user says "apply changes", "fix the paper",
-  "implement feedback", or after a review panel produces an action list.
-  Invokes /humanizer on modified sections.
+  Implements text changes to a LaTeX paper, downloads real bibtex for new
+  citations, removes AI writing patterns via /humanizer, and compiles the PDF.
+  Use when the user says "apply changes", "fix the paper", "implement feedback",
+  or after a review panel produces an action list.
 argument-hint: "[paper_dir]"
 allowed-tools:
   - Read
@@ -14,6 +14,7 @@ allowed-tools:
   - Glob
   - Bash
   - WebSearch
+  - WebFetch
   - Agent
 ---
 
@@ -23,8 +24,8 @@ Three phases: A) edit text, B) humanize, C) compile PDF.
 
 ## On invocation
 
-1. Read `.claude/latest-run/latest/ROUND_STATE.md` for action list.
-2. Read `.claude/latest-run/latest/DISCUSSION_THREAD.md` for context.
+1. Read `papr-runs/latest-run/latest/ROUND_STATE.md` for action list.
+2. Read `papr-runs/latest-run/latest/DISCUSSION_THREAD.md` for context.
 3. Read the paper's .tex files that need editing.
 
 ## Phase A: Write
@@ -45,8 +46,29 @@ Priority order (avoids line-number conflicts):
 - Contributions: <=3 items, each verifiable
 
 ### References (CRITICAL)
-Every `\cite{}` and bib entry MUST be verified via WebSearch. Find the actual paper,
-confirm title/authors/venue/year, and use the real bibtex. No hallucinated references.
+
+WebSearch verification alone is not enough -- LLMs still hallucinate fields when
+asked to "use the real bibtex." For every `\cite{}` you add or change:
+
+1. WebSearch the paper title + first author to find the canonical source
+   (arXiv abs page, ACL Anthology, OpenReview, IEEE/ACM DL, Semantic Scholar).
+2. Download the actual `.bib` file. Examples:
+   - arXiv:  `curl -sL "https://arxiv.org/bibtex/<id>" -o references/<key>.bib`
+   - ACL Anthology: visit the paper page, click "BibTeX," `curl` the link.
+   - OpenReview: forum page has BibTeX export.
+   - Semantic Scholar API: `curl "https://api.semanticscholar.org/graph/v1/paper/<id>?fields=citationStyles" | jq -r .citationStyles.bibtex > references/<key>.bib`
+3. Save one file per paper at `[paper_dir]/references/<citekey>.bib`.
+4. Concatenate or `\input{}` them into the project's main `.bib`, OR add
+   `references/` to the `\bibliography{}` search path. Verify `bibtex` /
+   `biber` resolves every key with no warnings.
+5. Keep the downloaded `.bib` files in the repo -- they are the audit trail
+   that the citation is real and unmodified.
+
+If a paper cannot be located after a thorough search, REMOVE the `\cite{}`
+rather than fabricating a bibtex entry. A missing citation is a fixable
+weakness; a hallucinated one is a desk-reject signal.
+
+No hallucinated references. No "I'll just write the bibtex from memory."
 
 ### Figures
 - Consistent color palette, NO titles (caption is the title)
@@ -60,9 +82,17 @@ confirm title/authors/venue/year, and use the real bibtex. No hallucinated refer
 ### Depth Over Breadth
 - Prefer 2-3 deeply analyzed results over 10 shallow observations
 - Every claim should lead to "why" or "what does this tell us"
-- Do NOT add Spearman/Pearson correlation, Cohen's d, Wilson CI, bootstrap CI,
-  t-tests, or p-values as a substitute for analysis. These are SHALLOW and
-  ruin paper structure. Only include if absolutely central to a claim.
+- Do NOT add Spearman/Pearson correlation, Cohen's d/kappa, Wilson CI,
+  bootstrap CI, t-tests, McNemar's test, Fisher's exact test, chi-squared,
+  p-values, or "statistically significant" framing as a substitute for
+  analysis. These are SHALLOW and ruin paper structure. A reviewer reads
+  "the difference is statistically significant (p<0.05)" as a substitute for
+  insight, not as rigor. Only include if absolutely central to a claim, and
+  even then push them to the appendix.
+- Real depth = mechanism explanation, failure-case study, ablation isolating
+  one component, qualitative analysis, learned-representation visualization.
+  Frame every result as "X is Y percentage points better BECAUSE Z," not "X
+  beats Y with p=0.04."
 
 ### Writing Style (model after top-tier papers)
 
@@ -85,7 +115,7 @@ Specific section guidance:
 - **Conclusion**: Synthesizes contributions and points to future work.
   Does NOT restate the abstract. ~1 paragraph.
 
-Log changes to `.claude/latest-run/latest/ROUND_STATE.md`.
+Log changes to `papr-runs/latest-run/latest/ROUND_STATE.md`.
 
 ## Phase B: Humanize
 
@@ -101,7 +131,7 @@ If compilation fails, fix LaTeX errors and retry. Verify with `pdfinfo [paper_di
 
 ## Output
 
-Append to `.claude/latest-run/latest/ROUND_STATE.md`:
+Append to `papr-runs/latest-run/latest/ROUND_STATE.md`:
 ```
 ### Write + Humanize + Compile
 Sections modified: [list]

@@ -1,11 +1,13 @@
 ---
 name: papr-pipeline
 description: |
-  Run autonomous multi-round paper improvement on a LaTeX project. Use when
-  the user says "improve my paper", "review pipeline", "run papr", or wants
-  iterative paper improvement. Chains /papr-panel -> /papr-experiment ->
-  /papr-write -> /papr-review per round. Stops at score 9+/10.
+  Runs an autonomous multi-round paper improvement loop on a LaTeX project,
+  chaining /papr-panel -> /papr-experiment -> /papr-write -> /papr-review per
+  round and stopping at score 9+/10. Use when the user says "improve my paper",
+  "review pipeline", "run papr", or asks for iterative paper improvement.
+  Heavy side effects: long compute, latex compiles, external Codex calls.
 argument-hint: "[rounds] [paper_dir]"
+disable-model-invocation: true
 allowed-tools:
   - Read
   - Write
@@ -16,15 +18,13 @@ allowed-tools:
   - Agent
   - WebSearch
   - WebFetch
-  - mcp__codex__codex
-  - mcp__codex__codex-reply
 ---
 
 # Paper Improvement Pipeline
 
 Fully autonomous. Do NOT ask the user between rounds. Do NOT pause for confirmation.
 
-Each round: `/papr-panel` -> `/papr-experiment` -> `/papr-write` -> `/papr-review` (GPT-5.4 via Codex)
+Each round: `/papr-panel` -> `/papr-experiment` -> `/papr-write` -> `/papr-review` (Codex plugin, latest GPT)
 
 IMPORTANT: Experiments are NOT optional. Text reframing alone rarely gets a paper
 accepted at a top venue. If the panel identifies weak experimental evidence, missing
@@ -37,20 +37,23 @@ experiments just because they take time.
 2. `N` = first argument (default 3).
 3. Setup directories and state. The unique timestamp ensures isolation from
    previous runs. Each pipeline invocation gets its own directory.
+   Output goes under `papr-runs/` (NOT `.claude/`) because writes to `.claude/`
+   are gated by Claude Code permission prompts even with `--dangerously-skip-permissions`.
 ```bash
-BASE=.claude/papr-$(date +%m-%d-%H-%M-%S)
+mkdir -p papr-runs
+BASE=papr-runs/papr-$(date +%m-%d-%H-%M-%S)
 mkdir -p $BASE/round-{1..$N}
 ln -sfn round-1 $BASE/latest
-ln -sfn $BASE .claude/latest-run
+ln -sfn $(basename $BASE) papr-runs/latest-run
 ```
-4. Write `.claude/latest-run/latest/ROUND_STATE.md`:
+4. Write `papr-runs/latest-run/latest/ROUND_STATE.md`:
 ```
 # Pipeline State
 ## Paper: [paper_dir]
 ## Rounds: [N]
 ## Started: [date]
 ```
-5. Write empty `.claude/latest-run/latest/DISCUSSION_THREAD.md`.
+5. Write empty `papr-runs/latest-run/latest/DISCUSSION_THREAD.md`.
 6. Start round loop.
 
 ## Round loop
@@ -98,8 +101,11 @@ Experiment and write CAN use Skill tool since they need prior round context.
 ## Output
 
 ```
-.claude/papr-[MM-DD-HH]/
+papr-runs/papr-[MM-DD-HH-MM-SS]/
 ├── round-1/   ROUND_STATE.md, DISCUSSION_THREAD.md
 ├── round-2/   ...
 └── latest -> round-N/
+papr-runs/latest-run -> papr-[MM-DD-HH-MM-SS]/
 ```
+
+Add `papr-runs/` to `.gitignore` so run artifacts stay out of your paper repo.

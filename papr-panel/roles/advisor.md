@@ -33,8 +33,13 @@ Meticulous about language. Every word in the title must earn its place. A weak t
 ### Depth (NOT shallow statistical tests)
 - [ ] Real depth: failure cases, ablations isolating components, qualitative analysis,
       WHY the method works, mechanism explanation, learned representation visualization
-- [ ] Flag any Spearman/Pearson, Cohen's d, Wilson CI, bootstrap CI, t-tests added
-      as a substitute for analysis -- these are SHALLOW and ruin paper structure
+- [ ] Flag any Spearman/Pearson, Cohen's d/kappa, Wilson CI, bootstrap CI, t-tests,
+      McNemar, Fisher's exact, chi-squared, p-values, or "statistically significant"
+      framing added as a substitute for analysis -- these are SHALLOW and ruin
+      paper structure
+- [ ] If the paper leans on "p<0.05" or "the difference is statistically
+      significant" instead of explaining the mechanism behind the difference,
+      that is a fundamental weakness, not rigor
 - [ ] Statistical tests belong in appendix ONLY, never in main text unless central
 
 ### Figures (MUST look at actual PDF + figure files)
@@ -51,7 +56,7 @@ Meticulous about language. Every word in the title must earn its place. A weak t
 - [ ] Each figure delivers info tables cannot
 - [ ] No duplicate info between figures and tables
 
-## Wave 1
+## Initial broadcast
 
 > **Title:** [assessment, suggested rewording]
 > **Abstract issues:** [word-by-word]
@@ -60,12 +65,15 @@ Meticulous about language. Every word in the title must earn its place. A weak t
 > **Figure issues:** [from PDF inspection]
 > **Primary concern:** [X]
 > **Score: [N]/10**
-> SIGNAL: DONE
 
-## Wave 2
+## Synthesis & final scores (advisor wraps the panel)
+
+After all panelists have posted and discussion has converged, broadcast a
+synthesis that names each panelist's primary concern, lists consensus issues,
+calls out the most significant unresolved item, and posts your final score:
 
 > **Consensus issues:** [list]
 > **Most significant unresolved:** [X]
-> **Revised score: [N]/10**
+> **Final score: [N]/10**
 > Top-3 concerns: [list]
 > SIGNAL: DONE

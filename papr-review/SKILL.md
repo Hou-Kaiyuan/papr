@@ -1,9 +1,10 @@
 ---
 name: papr-review
 description: |
-  Send a paper for external blind review via Codex plugin (GPT-5.4). Use when
-  the user says "external review", "get another opinion", "blind review", or
-  after papr-write completes. Compares external findings with internal panel.
+  Sends a paper for external blind review via the Codex plugin (latest GPT
+  model) and compares external findings with the internal panel. Use when the
+  user says "external review", "get another opinion", "blind review", or after
+  papr-write completes.
 argument-hint: "[paper_dir]"
 allowed-tools:
   - Read
@@ -13,47 +14,40 @@ allowed-tools:
   - Glob
   - Bash
   - Agent
-  - mcp__codex__codex
-  - mcp__codex__codex-reply
 ---
 
-# External Blind Review (via Codex / GPT-5.4)
+# External Blind Review (via Codex plugin)
 
-Sends finished paper to Codex for independent review using GPT-5.4.
+Sends finished paper to Codex for independent blind review using its current
+default GPT model (GPT-5.4 as of April 2026 -- Codex auto-routes, do not
+hardcode the version).
 
 ## Prerequisites
 
-Install Codex via EITHER the plugin (preferred) or the MCP server (legacy):
-
-**Option A: Codex Plugin (preferred)**
+Install the Codex plugin:
 ```
 /plugin marketplace add openai/codex-plugin-cc
 /plugin install codex@openai-codex
 /codex:setup
 ```
 
-**Option B: Codex MCP (legacy)**
-```bash
-npm install -g @openai/codex
-codex login
-claude mcp add codex -s user -- codex mcp-server
-```
-
-If neither available: write "External review skipped -- Codex not available." to `ROUND_STATE.md` and return.
+If the plugin is not installed: write `External review skipped -- Codex plugin
+not installed.` to `papr-runs/latest-run/latest/ROUND_STATE.md` and return.
 
 ## How to send the review
 
-Try in this order:
-1. If Codex plugin installed: use `codex:codex-cli-runtime` skill to send the prompt
-2. If Codex MCP available: use `mcp__codex__codex` tool to send the prompt
-3. If neither: skip and log
+Use the `codex:codex-cli-runtime` skill to send the prompt to Codex. If that
+skill is unavailable, log the failure and skip rather than falling back to any
+other path -- a contaminated review (e.g., one that picked up internal panel
+context) is worse than no external review.
 
 ## On invocation
 
 CRITICAL: Do NOT read ROUND_STATE.md before sending to Codex. Do NOT include
 any internal panel scores, round numbers, or revision history in the prompt.
-Do NOT explore the .claude/ directory or look for previous run history.
-Do NOT run `ls .claude/`, `find .claude/`, or any filesystem exploration there.
+Do NOT explore the .claude/ or papr-runs/ directories or look for previous run history.
+Do NOT run `ls .claude/`, `ls papr-runs/`, `find .claude/`, `find papr-runs/`,
+or any filesystem exploration there.
 Reading state contaminates your context and leaks into the prompt you construct.
 
 1. Read paper .tex files from `[paper_dir]`. Strip `\author{}` commands.
@@ -133,9 +127,9 @@ The median paper scores 5. If in doubt, score 4-5, not 6-7.
 
 ## Output
 
-Append to `.claude/latest-run/latest/ROUND_STATE.md`:
+Append to `papr-runs/latest-run/latest/ROUND_STATE.md`:
 ```
-## External Review (GPT-5.4 via Codex)
+## External Review (via Codex plugin)
 Score: [X/10]  Confidence: [Y/5]  Decision: [Accept/Borderline/Reject]
 [full review]
 

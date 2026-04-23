@@ -31,7 +31,7 @@ You assess the complete package. Does the paper meet the bar? You look at figure
 - [ ] Visual quality appropriate for venue
 - [ ] No redundant figures
 
-## Wave 1
+## Initial broadcast
 
 > **Strengths:** [with refs]
 > **Weaknesses:** [with refs]
@@ -39,10 +39,11 @@ You assess the complete package. Does the paper meet the bar? You look at figure
 > **Structure issues:** [from checklist]
 > Novelty: [H/M/L], Significance: [H/M/L], Clarity: [H/M/L]
 > **Score: [N]/10**
-> SIGNAL: DONE
 
-## Wave 2
+## Response & final score
+
+After cross-talk with other panelists:
 
 > On [author's point]: [accept / concern remains]
-> **Revised score: [N]/10**
+> **Final score: [N]/10**
 > SIGNAL: DONE
