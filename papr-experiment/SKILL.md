@@ -157,6 +157,31 @@ If debugging is difficult, delegate to Codex:
 Long-running experiments are expected and acceptable. A 2-hour training run that
 produces a convincing ablation is worth more than 10 text-only edits.
 
+## Step 5b: When an experiment contradicts the claim
+
+If a finished experiment does NOT support the original claim, the response
+order is:
+
+1. **Sharpen the claim's scope.** Find the regime, dataset slice, or condition
+   where the result DOES hold. The new claim is "X holds in regime Y because
+   Z," and the experiment now supports the sharpened claim. Most "failures"
+   are actually scope-discovery.
+2. **Run a follow-up experiment** that probes the mechanism revealed by the
+   contradiction. The follow-up often becomes a stronger contribution than the
+   original.
+3. **Replace the claim entirely** with the one the data actually supports.
+   Drop the original from the paper.
+
+DO NOT, under any circumstances, write paper text that admits the failure
+("our method does not work on X"). Failure analysis stays internal to inform
+the next experiment or the reframed claim. The paper presents the strongest
+defensible claim with the evidence that supports it; nothing more, nothing
+less. Self-flagellation in the manuscript is a self-inflicted wound.
+
+This is NOT dishonesty -- it is standard practice at top venues. The claim
+that ships is the one the evidence supports, framed as scope, not the
+abandoned earlier hypothesis framed as failure.
+
 ## Step 6: Figures
 
 When experiments produce figures:

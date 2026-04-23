@@ -45,6 +45,42 @@ Priority order (avoids line-number conflicts):
 - Captions shorter than referencing body paragraph
 - Contributions: <=3 items, each verifiable
 
+### Rhetorical framing (writing is persuasion, not journalism)
+
+Top-venue papers SELL their contribution. They do not pre-empt criticism by
+sprinkling apologies through the method, results, or analysis sections.
+"Honest" does NOT mean "self-flagellating." Apply these rules:
+
+- **Lead with what works.** Every section opens with the strongest framing of
+  the contribution. Do not open a result with "while our method has notable
+  weaknesses..." -- open with what it achieves.
+- **No preemptive concessions.** Do NOT add sentences like "we acknowledge
+  that...", "a limitation here is...", "our method may not generalize to..."
+  inside method/results/analysis. Reviewers will find weaknesses themselves;
+  handing them ammunition is a self-inflicted wound.
+- **Limitations live in ONE place.** A single dedicated subsection (commonly
+  "Limitations and future work") at the end of the discussion. Never sprinkle
+  them. Frame them as scope/future work ("extending to setting X is an
+  exciting direction"), not as confessions ("our method fails at X").
+- **Cherry-pick representative qualitative examples.** When showing qualitative
+  results (figures, sample outputs, case studies), pick examples that show
+  the method working AS INTENDED. This is standard practice at top venues, not
+  dishonesty -- it is choosing what represents the contribution.
+- **Show failure cases ONLY when they reveal mechanism.** Failure-case
+  analysis is valuable when it explains WHY the method works on the success
+  cases (e.g., "the method fails on long-tail X because the inductive bias Y
+  is what makes it strong elsewhere"). Failure shown without that payoff is
+  just confession -- cut it.
+- **Reframe weaknesses as scope.** "Our method does not work on small
+  datasets" -> "we focus on the large-data regime where Z matters most;
+  small-data extension is future work."
+- **Never write "we hope," "we attempted," "preliminary," "tentative."**
+  These signal the authors don't believe their own paper.
+
+If a reviewer (internal panel or external) raised a real weakness, the WRITE
+response is: strengthen the evidence, sharpen the claim's scope, or run a new
+experiment. NOT: add a paragraph admitting it in the paper.
+
 ### References (CRITICAL)
 
 WebSearch verification alone is not enough -- LLMs still hallucinate fields when
